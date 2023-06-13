@@ -1,13 +1,4 @@
-# это однострочный комментарий
-"""Это может считаться как
-многострочный комментарий
-print('Hello World!')"""
-a = 2 # int (integer)
-b = 1.1  # (float)ing point
-c = 'Привет' #
-d = True
-print(type(a))
-print(type(b))
-print(type(c))
-print(type(d))
-
+donut = input('Сколько стоил пончик: ')
+tea = input('Сколько стоил чай: ')
+summ = float(donut) + float(tea)
+print('Вы потратили:', round(summ, 2), 'руб.')
