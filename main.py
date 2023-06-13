@@ -1,5 +1,10 @@
-print('Акция "Гиги за шаги":')
-yest = int(input('Сколько шагов вчера: '))
-today = int(input('Сколько шагов сегодня: '))
-summ = yest + today
-print('Вы прошли: ' + str(summ) + ' шаг(ов).')
+a = 5
+b = 3
+
+print(a, '+', b, '=', a + b)
+print(a, '-', b, '=', a - b)
+print(a, '*', b, '=', a * b)
+print(a, '/', b, '=', round(a / b, 2))
+print(a, '//', b, '=', a // b)
+print(a, '^', b, '=', a ** b)
+print('Остаток от деления', a, 'на', b, '=', a % b)
