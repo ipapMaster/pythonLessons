@@ -75,3 +75,14 @@ C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python3xx\\Scripts\\flake8.ex
 Проверку файла осуществляем нажатием правой кнопкой мыши на нужный файл и далее:
 
 External Tools → Flake8
+
+
+### Список источников
+
+1. http://pythontutor.ru
+2. https://stepik.org/course/67/promo
+3. https://stepik.org/course/512/promo
+4. https://stepik.org/course/431/promo
+5. https://ru.hexlet.io/courses/python_101
+6. https://checkio.org/
+7. https://pythonru.com/uroki/1-vvedenie-vo-flask
