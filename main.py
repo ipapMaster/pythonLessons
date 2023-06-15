@@ -1,7 +1,7 @@
 import turtle as t
 
-dist = 100
-sides = 8
+dist = 30
+sides = 30
 angle = 360 / sides
 counter = 0
 
