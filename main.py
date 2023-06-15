@@ -1,10 +1,9 @@
-a = 5
-b = 3
+import math
 
-print(a, '+', b, '=', a + b)
-print(a, '-', b, '=', a - b)
-print(a, '*', b, '=', a * b)
-print(a, '/', b, '=', round(a / b, 2))
-print(a, '//', b, '=', a // b)
-print(a, '^', b, '=', a ** b)
-print('Остаток от деления', a, 'на', b, '=', a % b)
+r = float(input('Введите радиус окружности: '))
+
+L = 2 * math.pi * r  # длина окружности
+S = math.pi * r ** 2  # площадь круга
+
+print('Длина окружности:', round(L, 2))
+print('Площадь круга:', round(S, 2))

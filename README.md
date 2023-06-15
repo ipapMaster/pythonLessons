@@ -86,3 +86,13 @@ External Tools → Flake8
 5. https://ru.hexlet.io/courses/python_101
 6. https://checkio.org/
 7. https://pythonru.com/uroki/1-vvedenie-vo-flask
+
+### Информация о модулях
+- перечень установленных модулей: 
+
+`>>> help('modules')`
+- методы модуля: 
+
+`>>> import module`
+
+`>>> help(module)`
