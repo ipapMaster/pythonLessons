@@ -1,9 +1,22 @@
-import math
+import turtle as t
 
-r = float(input('Введите радиус окружности: '))
+dist = 200
+sides = 6
+angle = 360 / sides
 
-L = 2 * math.pi * r  # длина окружности
-S = math.pi * r ** 2  # площадь круга
+t.shape('turtle')  # задаём форму черепахи
 
-print('Длина окружности:', round(L, 2))
-print('Площадь круга:', round(S, 2))
+t.forward(dist)  # magic value
+t.right(angle)
+t.forward(dist)
+t.right(angle)
+t.forward(dist)
+t.right(angle)
+t.forward(dist)
+t.right(angle)
+t.forward(dist)
+t.right(angle)
+t.forward(dist)
+t.right(angle)
+
+t.mainloop()  # ожидание действий пользователя
