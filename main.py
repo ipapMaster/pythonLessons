@@ -1,9 +1,13 @@
-count = 10 # сколько нас было в начале
+python_group = []
 
-while count > 2:
-    print('Нас было - ' + str(count) + ',')
-    print('Один ушел - и нас осталось - ' + str(count - 1) + '.')
-    count -= 1 # декремент (count = count - 1)
-# следующая строка уже вне тела цикла
-print('Ушёл последний и я остался один.')
+python_group += ['Терентьев']
+python_group += ['Петров', 'Сидоров']
+python_group += ['Творогов']
 
+print('В группе', len(python_group), 'чел.\nВот они:')
+
+counter = 0
+
+while counter < len(python_group):
+    print('\t', str(counter + 1) + '.', python_group[counter])
+    counter += 1
