@@ -1,8 +1,7 @@
-python_group = []
+okroshka = ['колбаса', 'картофель', 'огурцы', 'яйца',
+            'зелень', 'кефир', 'сметана', 'вода', 'соль']
 
-python_group += ['Терентьев']
-python_group += ['Петров', 'Сидоров']
-python_group += ['Творогов']
+print('Для окрошки понадобится', len(okroshka),
+      'ингредиентов', end=': ')
+print(*okroshka, sep=', ', end='.')
 
-print('В группе', len(python_group), 'чел.\nВот они', end=': ')
-print(*python_group, sep=', ', end='.\n')
