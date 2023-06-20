@@ -1,14 +1,10 @@
-import turtle as t
+s = '168.192.1.1'  # неправильный IP-адрес
 
-colors = ['red', 'purple', 'blue', 'green',
-          'yellow', 'orange', 'cyan', 'magenta', 'pink']
-t.bgcolor('black')
-t.speed(0)  # мгновенная скорость
-angle = 39  # нестандартный поворот :)
-for x in range(200):
-    t.pencolor(colors[x % 9])
-    t.width(x // 100 + 1)
-    t.forward(x)
-    t.left(angle)
+lst = s.split('.')  # "расщепили" строку по точке
+print('До', lst)
+# меняем нулевой и первый элемент списка
+lst[1], lst[0] = lst[0], lst[1]
 
-t.mainloop()
+# 192.168.1.1 - правильный
+print('После', lst)
+print(*lst, sep='.')  # теперь в виде строки

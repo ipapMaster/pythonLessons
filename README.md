@@ -96,3 +96,11 @@ External Tools → Flake8
 `>>> import module`
 
 `>>> help(module)`
+
+### Информация о методах списков
+
+`>>> print(dir([]))`
+
+### Информация о методах строк
+
+`>>> print(dir(''))`
