@@ -1,13 +1,8 @@
-string = input('Введите пять целых чисел через пробел: ')
+# Кортеж (tuple)
 
-# 1. классический способ
-lst = string.split()
-a = []
-for x in lst:
-    a.append(int(x))
+string = 'python'
 
-print('Сумма чисел:', sum(a))
+python_list = list(string)
 
-# 2. списочным выражением
-a = [int(x) for x in string.split()]
-print('Сумма чисел:', sum(a))
+for index, value in enumerate(python_list):
+    print(index, '->', value)
