@@ -1,15 +1,13 @@
-from datetime import datetime
+string = input('Введите пять целых чисел через пробел: ')
 
-get_time = datetime.time(datetime.now())
-cur_time = get_time.strftime("%H:%M:%S")
-h = int(get_time.strftime("%H"))
-print('На часах', cur_time)
+# 1. классический способ
+lst = string.split()
+a = []
+for x in lst:
+    a.append(int(x))
 
-if 6 <= h < 12:
-    print('Доброе утро!')
-elif 12 <= h < 18:
-    print('Добрый день!')
-elif 18 <= h < 23:
-    print('Добрый вечер!')
-else:
-    print('Доброй ночи!')
+print('Сумма чисел:', sum(a))
+
+# 2. списочным выражением
+a = [int(x) for x in string.split()]
+print('Сумма чисел:', sum(a))
