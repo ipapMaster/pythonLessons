@@ -1,8 +1,12 @@
-# Кортеж (tuple)
+# Множество (set) - неупорядоченная коллекция данных, исключающая повторы
 
-string = 'python'
+t = ('a', 'b', 'c', 'a', 'b', 'c')
 
-python_list = list(string)
+s = set(t)  # убрали повторы
 
-for index, value in enumerate(python_list):
-    print(index, '->', value)
+l = list(s)  # превратили в список
+l.sort()  # чтобы получилось отсортировать
+print(l)
+
+# распечатка с помощью sorted()
+print(sorted(l))  # вернёт и напечатает
