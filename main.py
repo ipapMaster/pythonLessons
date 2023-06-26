@@ -9,6 +9,16 @@ def say_hello(name='bro'):
     print('Hello,', name)
 
 
+def greeting(cur_hour):
+    if 6 <= cur_hour < 12:
+        return 'Доброе утро'
+    if 12 <= cur_hour < 18:
+        return 'Добрый день'
+    if 18 <= cur_hour < 23:
+        return 'Добрый вечер'
+    return 'Доброй ночи'
+
+
 def summ(a, b):
     c = a + b  # локальные переменные
     # a = int(input('Введите первое слагаемое: '))
@@ -20,13 +30,4 @@ def summ(a, b):
     return c
 
 
-x, y = 1, 3  # глобальные переменные
-res = summ(x - 8, y - 10)
-if res == -1000:
-    print('Согласно задаче, в функцию нельзя передавать отрицательные значения.')
-else:
-    print('Сумма', x + 1, '+', y + 1, '=', res)
-
-print(x, y)
-# say_hello()
-# say_hello('Bill')
+print(greeting(19))
