@@ -9,7 +9,7 @@ def say_hello(name='bro'):
     print('Hello,', name)
 
 
-def greeting(cur_hour):
+def greeting(cur_hour=0):
     if 6 <= cur_hour < 12:
         return 'Доброе утро'
     if 12 <= cur_hour < 18:
@@ -30,4 +30,21 @@ def summ(a, b):
     return c
 
 
-print(greeting(19))
+def sqeq(a, b, c):
+    d = b * b - 4 * a * c
+    if d < 0:
+        return 'Нет корней'
+    if d == 0:
+        return -b / 2 * a
+    return (-b - d ** 0.5) / 2 * a, (-b + d ** 0.5) / 2 * a
+
+
+res = sqeq(4, -4, 4)
+
+if isinstance(res, tuple):
+    x1, x2 = res
+    print(round(x1, 2), round(x2, 2), sep='; ')
+elif isinstance(res, float):
+    print(round(res, 2))
+else:
+    print(res)
