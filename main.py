@@ -1,4 +1,8 @@
-lst = ['5', '4', '11', '8', '3', '1', '9']
+def summ(*args):
+    res = 0
+    for i in args:
+        res += i
+    return res, len(args)
 
-res = sum(map(int, lst))
-print(res)
+
+print(summ(1, 2, 3, 4, 5, 6))
