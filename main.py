@@ -1,11 +1,8 @@
-c = 3
+a = [i for i in range(1, 11)]
 
+# def twice(a):
+#     return a ** 2
+# lambda <аргументы>: <выражение>
+b = map(lambda x: x ** 2, a)
 
-def multiply(num):
-    global c  # получаем доступ к глобальной переменной
-    c *= num
-    print(c)
-
-
-multiply(5)
-print(c)
+print(list(b))
