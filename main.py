@@ -1,8 +1,12 @@
-def summ(*args):
-    res = 0
-    for i in args:
-        res += i
-    return res, len(args)
+counter = 0
 
+while True:
+    counter += 1
+    if counter > 10:
+        break
+    if counter == 5:  # чтобы не печатать цифру 5
+        continue
+    print(counter)
+    # куча всего
 
-print(summ(1, 2, 3, 4, 5, 6))
+print('Цикл прекращён!')
