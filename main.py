@@ -1,22 +1,10 @@
-string = 'Видеть, вертеть, смотреть.'
+phone = '+7-012-345-67-89'
 
-if 'еть' in string:
-    print('"еть" в строке есть')
-
-# получили число вхождений подстроки "еть"
-count = string.count('еть')
-print(count)  # и выведем его
-
-counter = 0  # счётчик проходов по строке
-indexes = []  # тут будем хранить индексы вхождений
-index = 0  # откуда ищем (с какого индекса)
-
-while counter < count:
-    if counter == 0:  # для первого прохода идём с нуля
-        index = string.find('еть', index)
-    else:
-        index = string.find('еть', index + 1)
-    indexes.append(index)
-    counter += 1
-
-print(*indexes)
+print('Исходный вариант номера', phone)
+# заменить все дефисы на пробел
+spaced_phone = phone.replace('-', ' ')
+print('С заменой дефисов на пробелы:', spaced_phone)
+# первая замена с сохранением во временной переменной
+temp = phone.replace('-', ' (', 1)
+bracked_code = temp.replace('-', ') ', 1)
+print('Код в скобках', bracked_code)
