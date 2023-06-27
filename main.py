@@ -1,11 +1,8 @@
-# strip - убирает символы в начале и конце строки
-# rstrip - убирает символы справа (конец строки)
-# lstrip - убирает символы слева (начале строки)
+string = 'город Рим'  # город Миргород
 
-string = '  pPythons       '
+temp = string.lower().split() ['город', 'рим']
+str1 = temp[1][::-1].capitalize()  # Мир
 
-string = string.strip()  # "чистим" все пробелы
-string = string.lstrip('p')  # убираем "p" слева (в начале)
-string = string.rstrip('s')  # убираем "s" справа (в конце)
+res = f'{temp[0]} {str1}{temp[0]}'
 
-print(string)
+print(res)
