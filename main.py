@@ -1,5 +1,8 @@
 string = 'Видеть, вертеть, смотреть.'
 
+if 'еть' in string:
+    print('"еть" в строке есть')
+
 # получили число вхождений подстроки "еть"
 count = string.count('еть')
 print(count)  # и выведем его
@@ -9,7 +12,7 @@ indexes = []  # тут будем хранить индексы вхождени
 index = 0  # откуда ищем (с какого индекса)
 
 while counter < count:
-    if counter == 0: # для первого прохода идём с нуля
+    if counter == 0:  # для первого прохода идём с нуля
         index = string.find('еть', index)
     else:
         index = string.find('еть', index + 1)
