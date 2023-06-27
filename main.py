@@ -1,6 +1,10 @@
-string = 'pytHon lAnguage'
+string = 'Видеть, вертеть, смотреть.'
+# find('что ищем', start, stop)
+index = string.find('еть')
+print(index)
 
-print(string.upper())  # PYTHON LANGUAGE
-print(string.lower())  # python language
-print(string.capitalize())  # Python language
-print(string.title())  # Python Language
+index = string.find('еть', 7)
+print(index)
+
+index = string.find('еть', 15, 20)
+print(index)
