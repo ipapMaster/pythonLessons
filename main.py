@@ -1,12 +1,14 @@
-counter = 0
+string = 'Python '
 
-while True:
-    counter += 1
-    if counter > 10:
-        break
-    if counter == 5:  # чтобы не печатать цифру 5
-        continue
-    print(counter)
-    # куча всего
+res = string + ' - ' + 'язык программирования!'  # КОНКАТЕНАЦИЯ (concatenation)
+res = string * 5  # повторение строки
+res = string[1]  # обращение по индексу (отсчёт от нуля)
+# string[2] = 'r'  # строка неизменяема (ошибка)
+# срез (как для строки, так и для списка, кортежа...) string[start:stop:step]
+res = string[:4:2]
+# возможен отрицательный индекс (для всех коллекций: списки, кортежи)
+res = string[-7]  # P
+# разворот срезом
+res = string[::-1]
 
-print('Цикл прекращён!')
+print(res)
