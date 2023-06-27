@@ -1,14 +1,14 @@
-string = 'Python '
+# res = ord(string[0])  # Код буквы P = 80 (код по символу)
+# res = chr(189)  # Символ с кодом 80 - P (символ по коду)
 
-res = string + ' - ' + 'язык программирования!'  # КОНКАТЕНАЦИЯ (concatenation)
-res = string * 5  # повторение строки
-res = string[1]  # обращение по индексу (отсчёт от нуля)
-# string[2] = 'r'  # строка неизменяема (ошибка)
-# срез (как для строки, так и для списка, кортежа...) string[start:stop:step]
-res = string[:4:2]
-# возможен отрицательный индекс (для всех коллекций: списки, кортежи)
-res = string[-7]  # P
-# разворот срезом
-res = string[::-1]
+# string = 'Python'  # UTF-8 (0 - 255)  -> UTF-16 (0 - 65535)
+string = 'S|wkrq'
+encrypted = []
 
-print(res)
+for letter in string:
+    code = ord(letter)
+    code -= 3
+    new_letter = chr(code)
+    encrypted.append(new_letter)
+
+print(*encrypted, sep='')
