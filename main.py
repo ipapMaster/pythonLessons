@@ -1,8 +1,7 @@
-string = 'город Рим'  # город Миргород
+from random import choice
 
-temp = string.lower().split() ['город', 'рим']
-str1 = temp[1][::-1].capitalize()  # Мир
+dashes = ['\u2680', '\u2681', '\u2682',
+          '\u2683', '\u2684', '\u2685']
 
-res = f'{temp[0]} {str1}{temp[0]}'
-
-print(res)
+for _ in range(10):
+    print(choice(dashes), choice(dashes))
