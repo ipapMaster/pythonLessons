@@ -1,16 +1,24 @@
 # PIL - Python Imaging Library
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
+W, H = 600, 400  # зададим ширину и высоту
 BLACK = (0, 0, 0)
+FGREEN = (34, 139, 34)
+ORANGE = (255, 69, 0)
 
-image = Image.open('python.png')
-w, h = image.size  # получим ширину и высоту
-pixels = image.load()  # загружаю список пикселей
+# создали холст
+canvas = Image.new('RGB', (W, H), FGREEN)
 
-for i in range(w):
-    for j in range(h):
-        r, g, b = pixels[i, j]
-        pixels[i, j] = g, b, r
+# создали объект для рисования (на холсте)
+draw = ImageDraw.Draw(canvas)
 
-image.save('inverted.png')
+# выберем тип объекта
+draw.line((0, 0, W, H), fill=ORANGE, width=5)
+draw.line((W, 0, 0, H), fill=ORANGE, width=5)
+draw.rectangle((0, 0, W, H), outline=ORANGE, width=5)
+draw.ellipse((100, 0, H + 100, H), outline=ORANGE, width=5)
+font = ImageFont.truetype(r'C:\Windows\Fonts\arial.ttf', 50)
+text = 'PYTHON'
+draw.text((200, 150), text, font=font, fill=ORANGE)
 
+canvas.save('canvas_line.png')
