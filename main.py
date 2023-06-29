@@ -1,19 +1,16 @@
-from random import randint, shuffle
+# PIL - Python Imaging Library
+from PIL import Image
 
-p_length = 12
+BLACK = (0, 0, 0)
 
-symbols = 'qwertyuiopasdfghjklzxcvbnm'
-symbols_caps = symbols.upper()
-numbers = '1234567890'
-special = '@#^'
-total = symbols + symbols_caps + numbers + special
-total_list = list(total)
-shuffle(total_list)
+image = Image.open('python.png')
+w, h = image.size  # получим ширину и высоту
+pixels = image.load()  # загружаю список пикселей
 
-length = len(total_list)
+for i in range(w):
+    for j in range(h):
+        r, g, b = pixels[i, j]
+        pixels[i, j] = g, b, r
 
-start = randint(0, length - p_length)
+image.save('inverted.png')
 
-pwd = total_list[start:start + p_length]
-
-print(*pwd, sep='')
