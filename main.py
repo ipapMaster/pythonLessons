@@ -20,5 +20,7 @@ draw.ellipse((100, 0, H + 100, H), outline=ORANGE, width=5)
 font = ImageFont.truetype(r'C:\Windows\Fonts\arial.ttf', 50)
 text = 'PYTHON'
 draw.text((200, 150), text, font=font, fill=ORANGE)
+draw.polygon((W // 2, 0, 0, H, W, H),
+             outline=ORANGE, width=5)
 
 canvas.save('canvas_line.png')
