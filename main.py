@@ -1,7 +1,19 @@
-from random import choice
+from random import randint, shuffle
 
-dashes = ['\u2680', '\u2681', '\u2682',
-          '\u2683', '\u2684', '\u2685']
+p_length = 12
 
-for _ in range(10):
-    print(choice(dashes), choice(dashes))
+symbols = 'qwertyuiopasdfghjklzxcvbnm'
+symbols_caps = symbols.upper()
+numbers = '1234567890'
+special = '@#^'
+total = symbols + symbols_caps + numbers + special
+total_list = list(total)
+shuffle(total_list)
+
+length = len(total_list)
+
+start = randint(0, length - p_length)
+
+pwd = total_list[start:start + p_length]
+
+print(*pwd, sep='')
