@@ -1,26 +1,13 @@
 # PIL - Python Imaging Library
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageFilter
 
-W, H = 600, 400  # зададим ширину и высоту
-BLACK = (0, 0, 0)
-FGREEN = (34, 139, 34)
-ORANGE = (255, 69, 0)
+original = Image.open('python.png')
 
-# создали холст
-canvas = Image.new('RGB', (W, H), FGREEN)
+blur = original.filter(ImageFilter.BLUR)
+blur.save('blur.png')
+blur = original.filter(ImageFilter.BoxBlur(5))
+blur.save('boxblur.png')
+blur = original.filter(ImageFilter.GaussianBlur(5))
+blur.save('gaussblur.png')
 
-# создали объект для рисования (на холсте)
-draw = ImageDraw.Draw(canvas)
 
-# выберем тип объекта
-draw.line((0, 0, W, H), fill=ORANGE, width=5)
-draw.line((W, 0, 0, H), fill=ORANGE, width=5)
-draw.rectangle((0, 0, W, H), outline=ORANGE, width=5)
-draw.ellipse((100, 0, H + 100, H), outline=ORANGE, width=5)
-font = ImageFont.truetype(r'C:\Windows\Fonts\arial.ttf', 50)
-text = 'PYTHON'
-draw.text((200, 150), text, font=font, fill=ORANGE)
-draw.polygon((W // 2, 0, 0, H, W, H),
-             outline=ORANGE, width=5)
-
-canvas.save('canvas_line.png')
