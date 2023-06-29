@@ -1,12 +1,12 @@
-# PIL - Python Imaging Library
-from PIL import Image, ImageFilter
+from lib import summ, diff
 
-original = Image.open('python.png')
-pixels = original.load()
-x, y = original.size
 
-for i in range(x // 2):
-    for j in range(y):
-        pixels[i, j], pixels[x - i - 1, j] = pixels[x - i - 1, j], pixels[i, j]
+def main():
+    x, y = 3, 4
 
-original.save('flipped.png')
+    print(summ(x, y))
+    print(diff(x, y))
+
+
+if __name__ == '__main__':
+    main()
