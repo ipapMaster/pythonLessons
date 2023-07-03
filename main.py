@@ -1,14 +1,17 @@
-# import os
-# if os.path.isfile(file)
+import os
 
 fname = 'info.txt'
+text = ''
 
-f = open(fname, 'at', encoding='utf-8')  # открыт на запись (текстовый файл)
-# для дозаписи используется a - append
-if f.encoding == 'utf-8':
-    print('Всё верно')
+if os.path.isfile(fname):
+    f = open(fname, 'rt', encoding='utf-8')  # открыт на чтение (текстовый файл)
+    text = f.read(6)  # курсор файла остановится на 6-й позиции
+    f.read(5)
+    text += f.read(9)
+    f.close()
 else:
-    print('Будьте осторожны с читабельностью')
-    print(f.encoding)
-f.write('Привет')
-f.close()
+    print('Файл не существует!')
+
+print(f'Из файла прочитано {len(text)} байт.')
+if text:
+    print(f'Вот этот текст: {text}')
