@@ -5,15 +5,10 @@ text = ''
 
 f = open(fname, 'rt', encoding='utf-8')
 
-temp = f.readline()
-while temp != '':
-    if temp[0] != '.':
-        text += temp
-    temp = f.readline()
+lst = f.readlines()
 
 f.close()
 
-print(text)
+res = list(map(lambda x: x.rstrip('\n'), lst))
 
-
-
+print(res)
