@@ -104,3 +104,16 @@ External Tools → Flake8
 ### Информация о методах строк
 
 `>>> print(dir(''))`
+
+
+### Как создать файл зависимостей requirements.txt через терминал 
+
+`pip freeze > requirements.txt`
+
+### Как установить зависимости из requirements.txt через терминал 
+
+`pip install -r requirements.txt`
+
+### Операции с requirements.txt средствами PyCharm
+
+`Menu -> Tools - > Sync Python Requirements`
