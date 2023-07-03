@@ -3,12 +3,17 @@ import os
 fname = 'info.txt'
 text = ''
 
-files = os.listdir()
+f = open(fname, 'rt', encoding='utf-8')
 
-f = open(fname, 'wt')
-for file in files:
-    print(file, file=f)
+temp = f.readline()
+while temp != '':
+    if temp[0] != '.':
+        text += temp
+    temp = f.readline()
+
 f.close()
+
+print(text)
 
 
 
