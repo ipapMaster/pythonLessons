@@ -1,12 +1,7 @@
-from lib import summ, diff
+import pymorphy2
 
+m = pymorphy2.MorphAnalyzer().parse('рубль')[0]
 
-def main():
-    x, y = 3, 4
+num = 271
 
-    print(summ(x, y))
-    print(diff(x, y))
-
-
-if __name__ == '__main__':
-    main()
+print(f'Мы потратили {num} {m.make_agree_with_number(num).word}.')
