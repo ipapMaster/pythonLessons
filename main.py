@@ -1,14 +1,17 @@
-from docx import Document
+import os
 
-document = Document()
+path = 'images'
+images = []
+root = os.getcwd()
 
-document.add_heading('Заголовок', 1)
-document.add_paragraph('А это обычный текст')
-document.add_heading('А вот это - маркированный список', 2)
-document.add_paragraph('Пункт 1', style='List Bullet')
-document.add_paragraph('Пункт 2', style='List Bullet')
-document.add_heading('А вот это - нумерованный список', 2)
-document.add_paragraph('Пункт 1', style='List Number')
-document.add_paragraph('Пункт 2', style='List Number')
+if not os.path.isdir(path):
+    os.mkdir(path)  # директория
 
-document.save('test.docx')
+files = os.listdir(root)  # вообще все файлы "корня"
+
+for file in files:
+    if os.path.isfile(file) and (file.endswith('.png') or file.endswith('.jpg')):
+        images.append(file)
+
+for image in images:
+    os.replace(image, path + '/' + image)
