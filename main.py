@@ -1,7 +1,14 @@
-import pymorphy2
+from docx import Document
 
-m = pymorphy2.MorphAnalyzer().parse('рубль')[0]
+document = Document()
 
-num = 271
+document.add_heading('Заголовок', 1)
+document.add_paragraph('А это обычный текст')
+document.add_heading('А вот это - маркированный список', 2)
+document.add_paragraph('Пункт 1', style='List Bullet')
+document.add_paragraph('Пункт 2', style='List Bullet')
+document.add_heading('А вот это - нумерованный список', 2)
+document.add_paragraph('Пункт 1', style='List Number')
+document.add_paragraph('Пункт 2', style='List Number')
 
-print(f'Мы потратили {num} {m.make_agree_with_number(num).word}.')
+document.save('test.docx')
