@@ -1,16 +1,13 @@
 import os
+import pickle as p
 
-fname = 'info.txt'
-text = ''
+dict = {
+    'стол': 'table',
+    'стул': 'chair'
+}
 
-if os.path.isfile(fname):
-    with open(fname, 'rt', encoding='utf-8') as f:
-        text = f.read()  # читаем строку целиком
-        # другие операции с открытым файлом
+with open('dictinary.dat', 'wb') as f:
+    p.dump(dict, f)
 
-# f.close() в этом случае уже не нужно
 
-if text:
-    res = text.splitlines()  # строковый метод, разбивающий строку на элементы списка по \n
 
-print(res)
