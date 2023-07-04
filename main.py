@@ -1,13 +1,13 @@
 import os
 import pickle as p
 
-dict = {
-    'стол': 'table',
-    'стул': 'chair'
-}
+# dict = {
+#     'стол': 'table',
+#     'стул': 'chair'
+# }
 
-with open('dictinary.dat', 'wb') as f:
-    p.dump(dict, f)
+with open('dictinary.dat', 'rb') as f:
+    dict = p.load(f)
 
-
+print(dict)
 
