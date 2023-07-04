@@ -1,11 +1,11 @@
-import requests
+# Исключения (Exception) Run-Time
 
-key = 'здесь ваш ключ'
-url = 'http://api.openweathermap.org/data/2.5/weather'
-params = {'APPID': key, 'q': 'Москва', 'units': 'metric'}
+fname = 'temp.txt'
 
-response = requests.get(url, params=params)
-result = response.json()
-
-print(result)
-print(result['main']['temp'])
+try:
+    with open(fname, encoding='utf-8') as f:
+        t = f.read()
+        print(t)
+except FileNotFoundError:
+    with open(fname, 'w', encoding='utf-8') as f:
+        f.write('Файл отсутствовал и был создан.')
