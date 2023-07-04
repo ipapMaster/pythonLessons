@@ -1,12 +1,11 @@
-import json  # Java Script Object Notation
+import requests
 
-with open('pet.json', 'r') as f:
-    string = f.read()
+key = 'здесь ваш ключ'
+url = 'http://api.openweathermap.org/data/2.5/weather'
+params = {'APPID': key, 'q': 'Москва', 'units': 'metric'}
 
-pet = json.loads(string)
+response = requests.get(url, params=params)
+result = response.json()
 
-for item in pet:
-    if type(pet[item]) == list:
-        print('Еда:', *pet[item])
-    else:
-        print(item, pet[item])
+print(result)
+print(result['main']['temp'])
