@@ -1,14 +1,10 @@
 # Исключения (Exception) Run-Time
-a, b = 10, 2
-z = [1, 2]
 
-try:  # попытка операции
-    print(a / b)
-    z[2] = a * b
-except IndexError:  # ошибка индекса
-    print('Неправильный индекс', z[-1])
-except ZeroDivisionError:  # деление на ноль
-    print('Деление на ноль', a / a)
+n = input('Введите целое число: ')
 
-# При обработанном исключении программа продложает работать
-print('Z =', z[1])
+try:
+    m = int(n)
+except ValueError:
+    print(f'Вас просили ввести целое число, а Вы ввели "{n}".')
+else:
+    print('Результат:', m / 2)
