@@ -2,11 +2,11 @@
 # Поиск по паттерну (pattern)
 import re
 
-pattern = r'\b\w{4}\b'  # поскольку есть backslash, используем r-строку
+pattern = r'\b\w{8}\b'  # поскольку есть backslash, используем r-строку
 testString = 'Мама мыла раму, а папа был на пилораме.'
 
 # метод findall ищет все возможные совпадения
-result = re.findall(pattern, testString)
+result = re.search(pattern, testString)
 
 # расшифруем метасимволы
 # \ - в паттерне указывает на начало последовательности
@@ -15,4 +15,6 @@ result = re.findall(pattern, testString)
 # \w - все буквы, цифры, и символ подчеркивания (@ - уже не то)
 # {4} - точно число совпадений
 
-print(result)
+begin, end = result.span()
+print(f'Встретили слово из 8 букв: {result[0]}.')
+print(f'Находится в строке на позициях с {begin} по {end}.')
