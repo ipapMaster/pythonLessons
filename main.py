@@ -1,14 +1,11 @@
 # Исключения (Exception) Run-Time
+# общая схема
 
-n = input('Введите целое число: ')
-
-try:
-    m = int(n)
-    res = m + 'пример невозможной конкатенации'
-except ValueError:
-    print(f'Вас просили ввести целое число, а Вы ввели "{n}".')
-except Exception as exp:
-    print('Имя исключения:', exp.__class__.__name__)
-    print('Что не так:', exp)
-else:
-    print('Результат:', m / 2)
+try:  # попытка совершения операции с потенциальным исключением
+    pass
+except Exception as exp:  # обязательный (или finally)
+    pass
+else:  # если исключение не возникало
+    pass
+finally:  # выполнится в любом случае
+    pass
