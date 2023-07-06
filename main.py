@@ -4,8 +4,11 @@ n = input('Введите целое число: ')
 
 try:
     m = int(n)
-except Exception as exp:
-    print('Исключение:', exp.__class__.__name__)
+    res = m + 'пример невозможной конкатенации'
+except ValueError:
     print(f'Вас просили ввести целое число, а Вы ввели "{n}".')
+except Exception as exp:
+    print('Имя исключения:', exp.__class__.__name__)
+    print('Что не так:', exp)
 else:
     print('Результат:', m / 2)
