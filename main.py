@@ -1,13 +1,13 @@
-# Дан код без обработки исключений
-
 while True:
     a = input('Введите первое число: ')
     b = input('Введите второе число: ')
-    if a.isdigit() and b.isdigit():  # Строки a и b – числа?
-        if int(b) == 0:  # если второе число равно нулю
-            print('На ноль делить нельзя!')
-        else:
-            print(int(a) / int(b))
-            break
+    try:
+        result = int(a) / int(b)  # попытка деления
+    except ValueError as exp:  # некорректный ввод
+        print('Одно из чисел введено некорректно!')
+        print(exp)
+    except ZeroDivisionError:  # деление на ноль
+        print('На ноль делить нельзя!')
     else:
-        print('Необходимо вводить только числа.')
+        print(result)
+        break
