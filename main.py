@@ -1,15 +1,16 @@
-# Вариант решения
-while True:
-    string_value = input('Введите целое число: ')
-    try:
-        int_val = int(string_value)  # пробуем преобразовать
-        # сообщение об успешном действии
-        print(f'Вы успешно ввели число {int_val}.')
-        break  # завершение цикла и программы
-    except ValueError:  # ошибка в значении
-        print(f'Ввод {string_value} - не корректен.')
-        # сообщение о том, что попытку необходимо
-        print('Попробуйте снова!')
-        # повторить (цикл, при этом, продолжается)
+# "Бросание" исключения (raise exception)
 
-print('До скорых встреч!!!')
+min_val = 1
+max_val = 10
+
+string = input(f'Введите целое число от {min_val} до {max_val}: ')
+try:
+    cur_val = int(string)
+    if not min_val <= cur_val <= max_val:
+        raise ValueError(f'введённое число вне заданного диапазона:'
+                         f' от {min_val} до {max_val}.')
+except ValueError as exp:
+    print('Произошло следующее:', exp.__class__.__name__)
+    print('Будьте внимательнее:', exp)
+else:
+    print('Успешный ввод.')
