@@ -1,16 +1,10 @@
-# "Бросание" исключения (raise exception)
+# Утверждение (assert -> AssertionError)
 
-min_val = 1
-max_val = 10
+text = input('Введите текст: ')
 
-string = input(f'Введите целое число от {min_val} до {max_val}: ')
 try:
-    cur_val = int(string)
-    if not min_val <= cur_val <= max_val:
-        raise ValueError(f'введённое число вне заданного диапазона:'
-                         f' от {min_val} до {max_val}.')
-except ValueError as exp:
-    print('Произошло следующее:', exp.__class__.__name__)
-    print('Будьте внимательнее:', exp)
+    assert len(text) > 3  # утвержение, что длина текста свыше 3 символов
+except AssertionError:
+    print('Длина введённого текста меньше 3-х символов.')
 else:
-    print('Успешный ввод.')
+    print('Всё в порядке. Длина текста в норме.')
