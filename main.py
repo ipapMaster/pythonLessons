@@ -9,5 +9,11 @@ while True:
     except ZeroDivisionError:  # деление на ноль
         print('На ноль делить нельзя!')
     else:
-        print(result)
+        int_part = int(result)
+        fraction_part = result - int_part
+        if fraction_part == 0.0:
+            print(int(result))
+        else:
+            print(round(result, 2))  # первый способ
+            print(f'{result:.2f}')  # второй способ
         break
