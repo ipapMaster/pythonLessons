@@ -1,32 +1,19 @@
 # Декораторы
-def say_hello():
-    print('Hello')
 
-# обернём функцию (wrapper - обёртка)
-def wrapper():
-    def say_hello():
-        print('Hello')
+def time_elapsed(func):  # Декоратор
+    import time
 
-    say_hello()
-
-
-def decorator_function(func):
     def wrapper():
-        print(f'Оборачиваемая функция: {func}')
-        print('Выполняем обёрнутую функцию')
+        start = time.time()  # засекли время
         func()
-        print('Выходим из обёртки')
-
+        end = time.time()  # выключили секундомер
+        print(f'Потрачено времени: {end - start} сек.')
     return wrapper
 
-
-# Выражение @decorator_function
-# вызывает decorator_function, определённую выше
-# с say_hello в качестве аргумента и присваивает
-# имени say_hello возвращаемую функцию
-@decorator_function  # синтаксический сахар
-def say_hello():
-    print('Hello')
+@time_elapsed
+def long_list_creation():
+    # создаём список из 1'000'000 значений
+    a = [i for i in range(10000000)]
 
 
-say_hello()
+long_list_creation()
