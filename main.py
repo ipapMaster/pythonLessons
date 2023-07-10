@@ -1,20 +1,32 @@
-# Регулярные выражения (Regular Expressions)
-# Поиск по паттерну (pattern)
-# Квантификаторы (quantifiers)
-# Способ указать о каком количестве идёт речь
-# {m} - ровно m раз
-# {m,} - m и более раз;
-# {,n} - не более, чем n раз
-# {m,n} - от m до n раз
-# ? - аналог {0,1}
-# * - от 0 до бесконечности {0,}
-# + - аналог {1,}
-import re
+# Декораторы
+def say_hello():
+    print('Hello')
 
-# "Вытащить" anchor из тега ссылки
-pattern = '<a.*?>(.*?)</a>'
-testString = '<a href="https://google.com">Google</a>'
+# обернём функцию (wrapper - обёртка)
+def wrapper():
+    def say_hello():
+        print('Hello')
 
-result = re.findall(pattern, testString)
+    say_hello()
 
-print(result[0])
+
+def decorator_function(func):
+    def wrapper():
+        print(f'Оборачиваемая функция: {func}')
+        print('Выполняем обёрнутую функцию')
+        func()
+        print('Выходим из обёртки')
+
+    return wrapper
+
+
+# Выражение @decorator_function
+# вызывает decorator_function, определённую выше
+# с say_hello в качестве аргумента и присваивает
+# имени say_hello возвращаемую функцию
+@decorator_function  # синтаксический сахар
+def say_hello():
+    print('Hello')
+
+
+say_hello()
