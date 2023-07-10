@@ -6,13 +6,16 @@
 # {m,} - m и более раз;
 # {,n} - не более, чем n раз
 # {m,n} - от m до n раз
+# ? - аналог {0,1}
+# * - от 0 до бесконечности {0,}
+# + - аналог {1,}
 import re
 
-pattern = 'o{3,5}'  # От 2 до 5 (пишем без пробела)
-testString = 'Google, Gooogle, Goooogle'
+# Greedy-quantifier - "жадный" квантификатор
+pattern = '<img.*>'  # Начинаются на +7 и содержат 10 цифр
+testString = '<p>Картинка <img src="bg.jpg"> в тексте </p>'
 
 # поскольку результатов может быть много, то используем findall
 result = re.findall(pattern, testString)
 
-
-print(result)
+print(result[0])
