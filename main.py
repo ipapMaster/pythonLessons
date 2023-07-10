@@ -11,11 +11,10 @@
 # + - аналог {1,}
 import re
 
-# "Вытащить" URL из текста (как http, так и https)
-pattern = r'http(?:s)?://[\S]+'
-testString = '<p>Информация здесь: https://google.com и ...</p>'
+# "Вытащить" URL из тега ссылки
+pattern = r'href=[\'"]?([^\'">]+)'
+testString = '<a href="https://google.com">Google</a>'
 
-# поскольку результатов может быть много, то используем findall
 result = re.findall(pattern, testString)
 
 print(result[0])
