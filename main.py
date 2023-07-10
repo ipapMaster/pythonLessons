@@ -10,11 +10,11 @@
 
 import re
 
-pattern = '[^абвгд]'  # Любое число от 00 до 59
-testString = 'АБВГДейка - детская передача!'
+pattern = r'\((.+?)\)'  # Любое число от 00 до 59
+testString = 'Поиск по образцу (pattern)'
 
 # поскольку результатов может быть много, то используем findall
-result = re.findall(pattern, testString, re.I)
+result = re.findall(pattern, testString)
 
 
 print(*result)
