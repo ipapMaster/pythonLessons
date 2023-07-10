@@ -11,9 +11,9 @@
 # + - аналог {1,}
 import re
 
-# Выбор текста в абзаце <p>...</p>
-pattern = '<p>(.*?)</p>'
-testString = '<b>Начало</b><p>Вот основной текст</p>, <i>и далее</i>'
+# Выбор только bold
+pattern = '<p[^>]*>(.*?)</p>'
+testString = '<b>Начало</b><p align="center">Вот основной текст</p>, <i>и далее</i>'
 
 # поскольку результатов может быть много, то используем findall
 result = re.findall(pattern, testString)
