@@ -11,9 +11,9 @@
 # + - аналог {1,}
 import re
 
-# Выбор только bold
-pattern = '<p[^>]*>(.*?)</p>'
-testString = '<b>Начало</b><p align="center">Вот основной текст</p>, <i>и далее</i>'
+# "Вытащить" URL из текста (как http, так и https)
+pattern = r'http(?:s)?://[\S]+'
+testString = '<p>Информация здесь: https://google.com и ...</p>'
 
 # поскольку результатов может быть много, то используем findall
 result = re.findall(pattern, testString)
