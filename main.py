@@ -11,8 +11,8 @@
 # + - аналог {1,}
 import re
 
-# "Вытащить" URL из тега ссылки
-pattern = r'href=[\'"]?([^\'">]+)'
+# "Вытащить" anchor из тега ссылки
+pattern = '<a.*?>(.*?)</a>'
 testString = '<a href="https://google.com">Google</a>'
 
 result = re.findall(pattern, testString)
