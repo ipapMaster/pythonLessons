@@ -1,19 +1,10 @@
 # ООП
+from lib import Car
 
-class Car:
-    def __init__(self):
-        self.engine_on = False
-
-    def start_engine(self):
-        self.engine_on = True
-
-    def drive(self, where):
-        if self.engine_on:
-            print('Едем', where)
-        else:
-            print('Мотор не заведён.')
-
-
-car = Car()
-car.start_engine()
-car.drive('на работу!')
+if __name__ == '__main__':
+    car = Car('Volvo')
+    car.start_engine()
+    car.set_name('Жигули')
+    car.drive('на работу')
+    # напрямую обращаться к атрибутам
+    # не рекомендуется
