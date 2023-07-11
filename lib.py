@@ -26,6 +26,18 @@ class Car:
         if self.__name == '':
             self.__name = newname
 
+class Fruit:
+    def __init__(self, name=''):
+        self.name = ''
+        if name != '':
+            self.name = name
+
+    def get_name(self):
+        return self.name
+
+    def set_name(self, newname):
+        if self.name == '':
+            self.name = newname
 
 # Для атрибутов принято использовать обозначения
 # self.name - public

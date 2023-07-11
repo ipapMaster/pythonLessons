@@ -1,10 +1,7 @@
 # ООП
-from lib import Car
+from lib import Fruit
 
 if __name__ == '__main__':
-    car = Car('Volvo')
-    car.start_engine()
-    car.set_name('Жигули')
-    car.drive('на работу')
-    # напрямую обращаться к атрибутам
-    # не рекомендуется
+    fruit = Fruit()
+    fruit.set_name('Яблоко')
+    print(fruit.get_name())
