@@ -1,7 +1,5 @@
-# ООП
-from lib import Fruit
+# ООП - Полиморфизм
+from lib import App
 
 if __name__ == '__main__':
-    fruit = Fruit()
-    fruit.set_name('Яблоко')
-    print(fruit.get_name())
+    app = App()
