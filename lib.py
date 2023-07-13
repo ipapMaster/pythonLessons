@@ -13,6 +13,9 @@ class Time:
     def __str__(self):
         return f'Время {self.minutes}:{self.seconds}'
 
+    def __repr__(self):
+        return f'Time({self.minutes}:{self.seconds})'
+
     def time_info(self):
         return f'{self.minutes}:{self.seconds}'
 
