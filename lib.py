@@ -10,6 +10,9 @@ class Time:
         s = s % 60
         return Time(m, s)
 
+    def __str__(self):
+        return f'Время {self.minutes}:{self.seconds}'
+
     def time_info(self):
         return f'{self.minutes}:{self.seconds}'
 
