@@ -1,10 +1,13 @@
 # ООП - Спецметоды
-from lib import Time
+from lib import ReversedList
 
 if __name__ == '__main__':
-    t1 = Time(5, 50)
-    t2 = Time(3, 20)
+    lst = ReversedList([1, 2, 3])
 
-    t3 = t1 + t2
+    for i in range(len(lst)):  # __len__()
+        print(lst[i])  # __getitem__(item)
 
-    print(t3.time_info())
+# должен распечатать:
+# 3
+# 2
+# 1
