@@ -1,6 +1,12 @@
-# ООП - Спецметоды
-from lib import Time
+# ООП - Спец. методы
+from lib import Rectangle
 
 if __name__ == '__main__':
-    lst = [Time(3, 30), Time(5, 20)]
-    print(lst)  # lst.__repr__()
+    rect1 = Rectangle(80, 20)
+    rect2 = Rectangle(20, 80)
+
+    # print(id(rect1), id(rect2))
+    print(rect1 == rect2)
+    print(rect1 > rect2)
+    print(rect1 + rect2)
+    print(rect1 - rect2)
