@@ -1,10 +1,39 @@
-class Rectangle:
+class Greeter:
+    def greet(self):
+        print('Привет')
+
+
+class GreetToName(Greeter):
+    def greet(self):
+        # print('Привет тебе')
+        super().greet()
+
+
+class Shape:
+    def __init__(self):
+        self.w = None
+        self.h = None
+
+    def area(self):
+        return None
+
+    def perimeter(self):
+        return None
+
+
+class Rectangle(Shape):
     def __init__(self, w, h):
         self.w = w
         self.h = h
 
     def perimeter(self):
         return (self.w + self.h) * 2
+
+    def area(self):
+        return self.w * self.h
+
+    def diagonal(self):
+        return ((self.w ** 2) + (self.h ** 2)) ** 0.5
 
     def __eq__(self, other):  # self.__eq__(other)
         if (self.h * self.w) == (other.h * other.w):
@@ -28,6 +57,13 @@ class Rectangle:
 
     def __str__(self):
         return f'Rectangle({self.w}, {self.h})'
+
+
+class Square(Rectangle):
+    def __init__(self, a):
+        # print('Конструируем квадрат из прямоугольника')
+        # self.a = a
+        super().__init__(a, a)  # вызван конструктор базового класса
 
 
 class Time:
