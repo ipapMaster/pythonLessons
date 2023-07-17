@@ -5,26 +5,24 @@
 # Класс B "умеет" то же, что и класс A. Плюс "умеет"
 # что-то сверх того, что может A
 # Класс B "расширяет" класс A - class B(A)
-from lib import Rectangle, Square, Shape, GreetToName
+
+from tkinter import Tk, Button
+from PIL import ImageTk, Image
 
 
-def describe_shape(shape):
-    print(f'Мы имеем дело с классом {shape.__class__.__name__}({shape.w}, {shape.h})')
-    print(f'Периметр {shape.__class__.__name__} будет {shape.perimeter()}')
-    print(f'Площадь {shape.__class__.__name__} будет {shape.area()}')
+class MyButton(Button):
+    def __init__(self, pict, command):
+        self.image = Image.open(pict)
+        self.image = self.image.resize((100, 100))
+        self.pict = ImageTk.PhotoImage(self.image)
+        super().__init__(image=self.pict, command=command)
 
 
-if __name__ == '__main__':
-    shape = Shape()
-    rect1 = Rectangle(80, 20)
-    rect2 = Rectangle(20, 80)
-    sq1 = Square(5)
-    # print(sq1.perimeter())
-    # print(sq1.area())
-    # print(sq1.diagonal())
-    describe_shape(rect2)
-    describe_shape(sq1)
-    describe_shape(shape)
-    gr = GreetToName()
-    gr.greet()
+root = Tk()
+root.geometry('800x600')
+root.title('Красивая кнопка')
 
+MyButton("pensil.png", command=lambda: print('click')).pack()
+MyButton("pensil.jpg", command=lambda: print('click')).pack()
+MyButton("sea.png", command=lambda: print('click')).pack()
+root.mainloop()
