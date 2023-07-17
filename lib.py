@@ -1,3 +1,49 @@
+class Profile:
+    def __init__(self, profession):
+        self.profession = profession
+
+    def info(self):
+        return ''
+
+    def describe(self):
+        return f'Дополнительная информация: {self.profession} {self.info()}'
+
+
+class Vacancy(Profile):
+    def __init__(self, profession, salary):
+        super().__init__(profession)
+        self.salary, self.profession = salary, profession
+
+    def info(self):
+        return f'Предлагаемая зарплата: {self.salary} для профессии {self.profession}'
+
+
+class Resume(Profile):
+    def __init__(self, profession, experience):
+        super().__init__(profession)
+        self.profession = profession
+        self.experience = experience
+
+    def info(self):
+        return f'Стаж работы {self.experience}'
+
+
+class Triangle:
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def perimeter(self):
+        return self.a + self.b + self.c
+
+
+class EquilateralTriangle(Triangle):
+    def __init__(self, a):
+        super().__init__(a, a, a)
+        self.a = a
+
+
 class Greeter:
     def greet(self):
         print('Привет')
@@ -23,6 +69,7 @@ class Shape:
 
 class Rectangle(Shape):
     def __init__(self, w, h):
+        super().__init__()
         self.w = w
         self.h = h
 
