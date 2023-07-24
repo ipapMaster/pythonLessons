@@ -9,9 +9,9 @@ connection = sqlite3.connect('films.sqlite')
 cursor = connection.cursor()
 
 # создаём запрос
-# UPDATE <table> SET <имя поля> = NEW VALUE WHERE <условие>
+# DELETE from <table> WHERE <условие>
 query = f"""
-UPDATE genres SET title = 'Жизнь'
+DELETE FROM genres
 WHERE id = 29
 """
 
