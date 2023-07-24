@@ -3,10 +3,10 @@ from io import BytesIO
 import requests
 from tkinter import NW, X, END
 from tkinter import Tk, Button, PhotoImage, Label, Canvas, Entry
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, UnidentifiedImageError
 
 
-class App:
+class Map_Search:
     def __init__(self):
         # настройки параметров окна
         self.root = Tk()
@@ -21,20 +21,16 @@ class App:
         self.label_clock = Label(font=('Verdana', 20))
         self.header = Label(text='Адрес:', font=('Verdana', 12))
         self.entry = Entry(width=50, font=('Verdana', 14))
+        self.entry.bind('<Return>', self.find)
         self.button = Button(text='Найти', command=self.search)
-        self.plus = Button(text='+', font=('Verdana', 14),
-                           command=self.positive_zoom)
-        self.minus = Button(text=chr(8212), font=('Verdana', 14),
-                            command=self.negative_zoom)
         self.canvas = Canvas(width=600, height=450)
+        self.lon, self.lat = self.pt_lon, self.pt_lat = 37.617698, 55.755864
         # размещаем элементы
         self.header.place(x=15, y=35)
         self.entry.place(x=85, y=35)
         self.button.place(x=700, y=35)
         self.canvas.place(x=100, y=75)
         self.label_clock.place(x=320, y=540)
-        self.plus.place(x=475, y=540)
-        self.minus.place(x=250, y=540)
         self.delta = '0.001'  # для изменения spn
         # добавляем изображение-пустышку
         image = Image.new('RGB', (600, 450), (255, 255, 255))
@@ -42,6 +38,9 @@ class App:
         self.photo = ImageTk.PhotoImage(self.orig)
         self.canvas.create_image(0, 0, anchor=NW, image=self.photo)
         self.show_time()  # вызов метода отображения часов
+
+    def find(self, event=None):
+        self.search()
 
     def search(self):
         self.what_to_find = self.entry.get().strip()
@@ -55,21 +54,67 @@ class App:
             'format': 'json'
         }
         url = 'http://geocode-maps.yandex.ru/1.x/'
-        response = requests.get(url, params=geocoder_params).json()
-        toponym = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
-        coords = toponym['Point']['pos']
-        coords = coords.split()
+        try:
+            response = requests.get(url, params=geocoder_params).json()
+            toponym = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
+            self.lon, self.lat = self.pt_lon, self.pt_lat = toponym['Point']['pos'].split()
+            self.show_map()
+        except IndexError:
+            self.show_error_image('error_pict.png')
+
+    def show_map(self):
         map_params = {
-            'll': ','.join(coords),
+            'll': f'{self.lon},{self.lat}',
             'spn': f'{self.delta},{self.delta}',
             'l': 'map',
-            'pt': ','.join(coords) + ',pm2dgl'
+            'pt': f'{self.pt_lon},{self.pt_lat},pm2dgl'
         }
         map_url = 'http://static-maps.yandex.ru/1.x/'
-        response = requests.get(map_url, params=map_params)
-        self.orig = Image.open(BytesIO(response.content))
-        self.photo = ImageTk.PhotoImage(self.orig)
+        try:
+            response = requests.get(map_url, params=map_params)
+            self.orig = Image.open(BytesIO(response.content))
+            self.photo = ImageTk.PhotoImage(self.orig)
+            self.canvas.create_image(0, 0, anchor=NW, image=self.photo)
+        except UnidentifiedImageError:
+            self.show_error_image('error_pict.png')
+
+    def show_error_image(self, img):
+        temp_img = Image.open(img)
+        self.photo = ImageTk.PhotoImage(temp_img)
         self.canvas.create_image(0, 0, anchor=NW, image=self.photo)
+
+    def forever(self):
+        self.root.mainloop()
+
+    def show_time(self):
+        time_to_show = datetime.now().strftime('%H:%M:%S')
+        self.label_clock['text'] = time_to_show
+        self.root.after(1000, self.show_time)
+
+
+class MapOperate(Map_Search):
+    def __init__(self):
+        super().__init__()
+        # кнопки управления будут здесь
+        self.plus = Button(text='+', font=('Verdana', 14),
+                           command=self.positive_zoom)
+        self.minus = Button(text=chr(8212), font=('Verdana', 14),
+                            command=self.negative_zoom)
+        self.left = Button(text='<', font=('Verdana', 14),
+                           command=self.move_left)
+        self.right = Button(text='>', font=('Verdana', 14),
+                            command=self.move_right)
+        self.plus.place(x=475, y=540)
+        self.minus.place(x=250, y=540)
+        self.left.place(x=40, y=250)
+        self.right.place(x=725, y=250)
+        self.canvas.bind('<MouseWheel>', self.wheel_zoom)
+
+    def wheel_zoom(self, event):
+        if event.delta > 0:
+            self.positive_zoom()
+        else:
+            self.negative_zoom()
 
     def positive_zoom(self):
         temp = float(self.delta) / 2
@@ -85,10 +130,12 @@ class App:
         self.delta = str(temp)
         self.search()
 
-    def forever(self):
-        self.root.mainloop()
+    def move_right(self):
+        temp = float(self.lon) - float(self.delta) * 0.1
+        self.lon = str(temp)
+        self.show_map()
 
-    def show_time(self):
-        time_to_show = datetime.now().strftime('%H:%M:%S')
-        self.label_clock['text'] = time_to_show
-        self.root.after(1000, self.show_time)
+    def move_left(self):
+        temp = float(self.lon) + float(self.delta) * 0.1
+        self.lon = str(temp)
+        self.show_map()
