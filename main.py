@@ -8,14 +8,11 @@ connection = sqlite3.connect('films.sqlite')
 # создаём курсор
 cursor = connection.cursor()
 
-# Вычисляем максимальный ID
-id_max = cursor.execute("SELECT MAX(id) from genres").fetchone()[0]
-id_max += 1
-
 # создаём запрос
-# INSERT INTO <table>(название полей) VALUES(значения в том же порядке)
+# UPDATE <table> SET <имя поля> = NEW VALUE WHERE <условие>
 query = f"""
-INSERT INTO genres VALUES(28, 'Наука'), (29, 'Техника')
+UPDATE genres SET title = 'Жизнь'
+WHERE id = 29
 """
 
 # выполнение запроса на добавление
