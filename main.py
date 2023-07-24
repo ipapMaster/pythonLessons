@@ -8,15 +8,21 @@ connection = sqlite3.connect('films.sqlite')
 # создаём курсор
 cursor = connection.cursor()
 
+# Вычисляем максимальный ID
+id_max = cursor.execute("SELECT MAX(id) from genres").fetchone()[0]
+id_max += 1
+
 # создаём запрос
-# query =
+# INSERT INTO <table>(название полей) VALUES(значения в том же порядке)
+query = f"""
+INSERT INTO genres(title) VALUES('Практика')
+"""
 
-# выполнение запроса
-result = cursor.execute("""SELECT title FROM films
-WHERE year > ? """, (2010, )).fetchmany(5)
+# выполнение запроса на добавление
+cursor.execute(query)
 
-for item in result:
-    print(item[0])
+# подтверждение запроса на запись (изменение БД)
+connection.commit()
 
 # Отключаемся от БД
 connection.close()
