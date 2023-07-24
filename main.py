@@ -15,7 +15,7 @@ id_max += 1
 # создаём запрос
 # INSERT INTO <table>(название полей) VALUES(значения в том же порядке)
 query = f"""
-INSERT INTO genres(title) VALUES('Практика')
+INSERT INTO genres VALUES(28, 'Наука'), (29, 'Техника')
 """
 
 # выполнение запроса на добавление
