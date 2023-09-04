@@ -12,7 +12,7 @@ class App:
         self.root.geometry('800x600')
         self.root.title('Работа с картинками')
         self.root.resizable(False, False)
-        self.root.iconphoto(True, PhotoImage(file='pencil.png'))
+        self.root.iconphoto(True, PhotoImage(file='static/images/world.png'))
         self.label = Label(text='Работа с изображениями',
                            background='yellow', foreground='red',
                            font=('Verdana', 16))
