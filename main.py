@@ -1,13 +1,58 @@
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
+from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 
 app = Flask(__name__)
 
 
+@app.route('/test_template')
+def template_test():
+    user = 'Слушатель'
+    return render_template('index.html', title='Приветствие', username=user)
+
+@app.route('/registration', methods=['GET', 'POST'])
+def regs():
+    user_dict = {
+        'email': 'эл. почта:',
+        'password': 'пароль:',
+        'class': 'аудитория:',
+        'about': 'обо мне:',
+        'sex': 'пол:',
+        'accept': 'согласен с правилами'
+    }
+    if request.method == 'POST':
+        with open('result.html', 'r', encoding='utf-8') as html:
+            content = html.read()
+        content = content.replace('{{ style }}', f'{url_for("static", filename="css/style.css")}')
+        d = dict(request.form)
+        insertion = ''
+        f = request.files['file']
+        if f:
+            f.save('static/images/' + f.filename)
+            insertion += f"""<div class="row text-center">
+                <div class="col text-center">
+                    <img src={url_for("static", filename="images/" + f.filename)} height="400">
+                </div>
+            </div>"""
+        for key in d:
+            insertion += f"""<div class="row">
+            <div class="col text-end h2">{user_dict[key]}</div>
+            <div class="col text-start h2">{d[key]}</div>
+            </div>
+            """
+        content = content.replace('{{ table }}', insertion)
+        return content
+    with open('regform.html', 'r', encoding='utf-8') as html:
+        content = html.read()
+    content = content.replace('{{ style }}', f'{url_for("static", filename="css/style.css")}')
+    return content
+
+
 @app.route('/')
 def index():
     return """Вот наше первое приложение.<br>
-    А вот <a href='/countdown'>ссылка</a> на обратный отсчёт.<br>
+    А вот <a href='/registration'>регистрация</a> пользователя.<br>
+    А вот <a href='/test_template'>тест</a> шаблонизации.<br>
     А вот <a href='/image_sample'>ссылка</a> на картинку.<br>
     А вот <a href='/sample_page'>ссылка</a> на HTML-документ.<br>
     А вот <a href='/empty'>ссылка</a> которую мы не увидим (редирект на главную).<br>
@@ -53,7 +98,7 @@ def weather():
     POST - отправляет данные на сервер
     PUT - заменяет данные сервера, данным запроса
     DELETE - удаляет указанные данные
-    PATCH - частиное изменение данных
+    PATCH - частичное изменение данных
     """
     if request.method == 'POST':
         if request.form.get('town'):
@@ -111,19 +156,9 @@ def return_page():
 
 @app.route('/bootstrap_sample')
 def bootstrap():
-    return """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <title>HTML-страница c Bootstrap</title>
-</head>
-<body>
-<h1>HTML-документ c Bootstrap</h1>
-<div class="alert alert-primary" role="alert">Балуемся с Bootstrap</div>
-</body>
-</html>"""
+    with open('templates/index.html', 'rt', encoding='utf-8') as html:
+        code = html.read()
+    return code
 
 
 if __name__ == '__main__':
