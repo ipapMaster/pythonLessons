@@ -5,10 +5,22 @@ import requests  # отдельный модуль для обращения к 
 app = Flask(__name__)
 
 
+@app.route('/odd_even')
+def odd_even():
+    params = {
+        'number': 2,
+        'title': 'Четное или нечётное'
+    }
+    return render_template('odd_even.html', **params)
+
+
 @app.route('/test_template')
 def template_test():
-    user = 'Слушатель'
-    return render_template('index.html', title='Приветствие', username=user)
+    params = {}
+    params['username'] = 'Слушатель'
+    params['title'] = 'Приветствие'
+    return render_template('index.html', **params)
+
 
 @app.route('/registration', methods=['GET', 'POST'])
 def regs():
@@ -61,6 +73,7 @@ def index():
     А теперь <a href='/file_upload'>загрузим</a> файл.<br>
     """
 
+
 @app.route('/file_upload', methods=['GET', 'POST'])
 def sample_upload():
     if request.method == 'POST':
@@ -72,6 +85,8 @@ def sample_upload():
     <input type="submit" value="Загрузить">
     </form>
     """
+
+
 @app.route('/<town>')
 def town_weather(town):
     """
