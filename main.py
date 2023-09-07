@@ -1,28 +1,30 @@
 import os
-
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
+from loginform import LoginForm
 
-app = Flask(__name__)
+app = Flask(__name__)  # создали экземпляр приложения
+app.config['SECRET_KEY'] = 'short secret key'
 
 
-# ДЗ: создать шаблон news.html
-# {% for переменная цикла in набор значений %}
-#     код и переменная loop c атрибутами
-#     loop.index - отсчёт начинается с 1
-#     loop.index0 - отсчёт начинается с 0
-#     loop.first - если первая итерация, то True
-#     loop.last - если последняя итерация, то True
-# {% endfor %}
-@app.route('/news')
-def news():
+@app.route('/')
+def index():
     with open('news.json', 'rt', encoding='utf=8') as file:
         news_list = json.loads(file.read())
-    return render_template('news.html',
-                           news=news_list,
-                           title='Новости')
+    return render_template('index.html',
+                           title='Главная страницы',
+                           username='Слушатель',
+                           news=news_list)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/success')  # домашняя работа
+    return render_template('login.html', title='Авторизация', form=form)
 
 
 @app.route('/users')
@@ -58,14 +60,6 @@ def odd_even(num):
         'title': 'Четное или нечётное'
     }
     return render_template('odd_even.html', **params)
-
-
-@app.route('/test_template')
-def template_test():
-    params = {}
-    params['username'] = 'Слушатель'
-    params['title'] = 'Приветствие'
-    return render_template('index.html', **params)
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -104,20 +98,6 @@ def regs():
         content = html.read()
     content = content.replace('{{ style }}', f'{url_for("static", filename="css/style.css")}')
     return content
-
-
-@app.route('/')
-def index():
-    return """Вот наше первое приложение.<br>
-    А вот <a href='/registration'>регистрация</a> пользователя.<br>
-    А вот <a href='/test_template'>тест</a> шаблонизации.<br>
-    А вот <a href='/image_sample'>ссылка</a> на картинку.<br>
-    А вот <a href='/sample_page'>ссылка</a> на HTML-документ.<br>
-    А вот <a href='/empty'>ссылка</a> которую мы не увидим (редирект на главную).<br>
-    А вот <a href='/bootstrap_sample'>ссылка</a> на Bootstrap.<br>
-    А вот <a href='/weather'>ссылка</a> на погоду.<br>
-    А теперь <a href='/file_upload'>загрузим</a> файл.<br>
-    """
 
 
 @app.route('/file_upload', methods=['GET', 'POST'])
@@ -181,46 +161,17 @@ def weather():
     """
 
 
-@app.route('/countdown')
-def countdown():
-    lst = [str(i) for i in range(10, 0, -1)]
-    lst.append('Старт!')
-    return '<br>'.join(lst) + '<br><a href=\'/\'>назад</a>'
-
-
-@app.route('/empty')
-def empty():
-    return redirect('/')
-
-
-@app.route('/image_sample')
-def img_sample():
-    return f"""<img src="{url_for('static', filename='images/sea.png')}">
-    <br><a href=\'/\'>назад</a>"""
-
-
-@app.route('/sample_page')
-def return_page():
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}">
-    <title>Первая HTML-страница</title>
-</head>
-<body>
-<h1>Первый HTML-документ</h1>
-<a href="/">назад</a>
-</body>
-</html>"""
-
-
-@app.route('/bootstrap_sample')
-def bootstrap():
-    with open('templates/index.html', 'rt', encoding='utf-8') as html:
-        code = html.read()
-    return code
-
-
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1')
+
+"""
+    Вот наше первое приложение.<br>
+    А вот <a href='/registration'>регистрация</a> пользователя.<br>
+    А вот <a href='/test_template'>тест</a> шаблонизации.<br>
+    А вот <a href='/image_sample'>ссылка</a> на картинку.<br>
+    А вот <a href='/sample_page'>ссылка</a> на HTML-документ.<br>
+    А вот <a href='/empty'>ссылка</a> которую мы не увидим (редирект на главную).<br>
+    А вот <a href='/bootstrap_sample'>ссылка</a> на Bootstrap.<br>
+    А вот <a href='/weather'>ссылка</a> на погоду.<br>
+    А теперь <a href='/file_upload'>загрузим</a> файл.<br>
+"""
