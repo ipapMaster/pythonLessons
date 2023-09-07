@@ -1,14 +1,60 @@
+import os
+
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
+import json
 
 app = Flask(__name__)
 
 
-@app.route('/odd_even')
-def odd_even():
+# ДЗ: создать шаблон news.html
+# {% for переменная цикла in набор значений %}
+#     код и переменная loop c атрибутами
+#     loop.index - отсчёт начинается с 1
+#     loop.index0 - отсчёт начинается с 0
+#     loop.first - если первая итерация, то True
+#     loop.last - если последняя итерация, то True
+# {% endfor %}
+@app.route('/news')
+def news():
+    with open('news.json', 'rt', encoding='utf=8') as file:
+        news_list = json.loads(file.read())
+    return render_template('news.html',
+                           news=news_list,
+                           title='Новости')
+
+
+@app.route('/users')
+def users():
+    t = 'Кто за кем в очереди???'
+    return render_template('query.html', title=t)
+
+
+@app.route('/combo')
+def combo():
     params = {
-        'number': 2,
+        'title': 'Ингредиенты окрошки',
+        'h1': 'Ингредиенты окрошки'
+    }
+    return render_template('combo_test.html', **params)
+
+
+@app.route('/slideshow')
+def slides():
+    root = os.getcwd()  # получили путь корневого каталога
+    os.chdir('./static/slides')  # перешли в папку слайдов
+    cwd = os.getcwd()  # записали путь к слайдам в cwd
+    # записываем все имена файлов в список (исключая имена каталогов)
+    picts = [f.name for f in os.scandir(cwd) if f.is_file()]
+    os.chdir(root)  # возвращаемся в корневой каталог
+    return render_template('pictures.html', picts=picts)
+
+
+@app.route('/odd_even/<int:num>')
+def odd_even(num):
+    params = {
+        'number': num,
         'title': 'Четное или нечётное'
     }
     return render_template('odd_even.html', **params)

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>Кто за кем:</h1>
+<!-- Создаём переменную -->
+{% set a = ['Пётр', 'Александр', 'Кирилл', 'Дмитрий'] %}
+<ol>
+    {% for user in a %}
+        <li>
+            {{ user }} № {{ loop.index0 }}
+            {% if loop.first %} - стоит первым
+            {% elif loop.last %} - стоит последним
+            {% endif %}
+        </li>
+    {% endfor %}
+</ol>
+</body>
+</html>

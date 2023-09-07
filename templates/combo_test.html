@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>{{ h1 }}</h1>
+{% set okr = ['картофель', 'кефир', 'огурец', 'колбаса'] %}
+<form>
+    <select>
+        {% for ingredient in okr %}
+            <option>{{ loop.index }}. {{ ingredient }}</option>
+        {% endfor %}
+    </select>
+</form>
+</body>
+</html>
