@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 
 {% block main_content %}
+<h1>Авторизация</h1>
     <form action="" method="post" novalidate>
-        <div>
-            {{ form.csrf_token }}
-        </div>
-        {% for field in form if field.name != 'csrf_token' %}
-        {{ field.label() }}
-        {{ field()}}<br>
-            {% for error in field.errors %}
-                <div class="error">{{ error }}</div>
-            {% endfor %}
+        {{ form.hidden_tag() }}
+        <p>
+        {{ form.username.label }}<br>
+        {{ form.username(class="form-control")}}<br>
+        {% for error in form.username.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
         {% endfor %}
+        </p>
+        <p>
+        {{ form.password.label }}<br>
+        {{ form.password(class="form-control", type="password")}}<br>
+        {% for error in form.password.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }}&nbsp;{{form.remember_me.label }}</p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     </form>
-{% endblock %}
+    {% endblock %}
