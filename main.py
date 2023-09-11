@@ -113,7 +113,7 @@ def sample_upload():
     """
 
 
-@app.route('/<town>')
+@app.route('/weather/<town>')
 def town_weather(town):
     """
     :param town:
