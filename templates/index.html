@@ -2,7 +2,7 @@
 
 {% block main_content %}
     <div class="alert alert-primary h1" role="alert">Привет, {{username}}!</div>
-    {% for item in news['news'] %}
+    {% for item in news %}
         <h2>{{ item['title'] }}</h2>
         <div>{{ item['content'] }}</div>
     {% endfor %}

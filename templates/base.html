@@ -24,6 +24,9 @@
                         <a class="nav-link {% if request.url_rule.endpoint == 'index' %} active {% endif %}" aria-current="page" href="/">Главная</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {% if request.url_rule.endpoint == 'add_post' %} active {% endif %}" href="/add">Добавить</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {% if request.url_rule.endpoint == 'login' %} active {% endif %}" href="/login">Войти</a>
                     </li>
                     <li class="nav-item">

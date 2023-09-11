@@ -1,22 +1,56 @@
 import os
+import sqlite3
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
+
+from addpost import NewPost
 from loginform import LoginForm
+from mail_sender import send_mail
 
 app = Flask(__name__)  # создали экземпляр приложения
 app.config['SECRET_KEY'] = 'short secret key'
 
 
+def connect_db():
+    """
+    Соединяемся с БД
+    :return connection object:
+    """
+    conn = sqlite3.connect('data/base.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    conn = connect_db()
+    conn.execute(
+        """CREATE TABLE IF NOT EXISTS posts 
+        (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+        title TEXT NOT NULL, 
+        content TEXT NOT NULL)""")
+    conn.close()
+
+
+def close_db(conn):
+    """
+    :param conn - от какой базы надо отключиться:
+    """
+    conn.close()
+
+
 @app.route('/')
 def index():
-    with open('news.json', 'rt', encoding='utf=8') as file:
-        news_list = json.loads(file.read())
+    # with open('news.json', 'rt', encoding='utf=8') as file:
+    #     news_list = json.loads(file.read())
+    conn = connect_db()  # подключились к базе
+    news = conn.execute("SELECT * FROM posts").fetchall()
+    conn.close()  # отключились от курсора базы
     return render_template('index.html',
                            title='Главная страницы',
                            username='Слушатель',
-                           news=news_list)
+                           news=news)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -28,6 +62,43 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+@app.route('/add', methods=['GET', 'POST'])
+def add_post():
+    form = NewPost()
+    if form.validate_on_submit():
+        res = form.data
+        id = res['id']
+        title = res['title']
+        content = res['content']
+        conn = connect_db()
+        conn.execute("INSERT INTO posts (title, content) VALUES(?, ?)",
+                     (title, content))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))  # '/'
+    return render_template('addpost.html', title='Добавление новости', form=form)
+
+
+@app.route('/mail_form', methods=['GET'])
+def main_form():
+    return render_template('ваш.html')
+# <form method="post" class="from-group">
+# 	<input type="email" class="form-control" name="email">
+# 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
+# </form>
+
+@app.route('/mail_form', methods=['POST'])
+def main_form():
+    email = request.values.get('email')
+    if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
+        return f'Письмо на адрес {email} успешно отправлено!'
+    return 'Сбой при отправке'
+
+
+# <form method="post" class="from-group">
+# 	<input type="email" class="form-control" name="email">
+# 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
+# </form>
 @app.route('/users')
 def users():
     t = 'Кто за кем в очереди???'
@@ -162,7 +233,12 @@ def weather():
     """
 
 
+# когда первый раз зашли на сайт
+# перед запуском рендера шаблона (первый из них)
+
+
 if __name__ == '__main__':
+    # init_db()
     app.run(port=8000, host='127.0.0.1')
 
 """
