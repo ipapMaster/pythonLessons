@@ -4,7 +4,7 @@ from flask import Flask, url_for, redirect, request  # flask.request - с чем
 from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
-
+from dotenv import load_dotenv
 from addpost import NewPost
 from loginform import LoginForm
 from mail_sender import send_mail
