@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from data import db_session
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
@@ -10,6 +11,8 @@ from loginform import LoginForm
 from mail_sender import send_mail
 
 app = Flask(__name__)  # создали экземпляр приложения
+# секретный ключ для защиты от cross-site request forgery,
+# CSRF - подделки межсайтовых запросов
 app.config['SECRET_KEY'] = 'short secret key'
 
 
@@ -18,7 +21,7 @@ def connect_db():
     Соединяемся с БД
     :return connection object:
     """
-    conn = sqlite3.connect('data/base.db')
+    conn = sqlite3.connect('base.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -275,7 +278,8 @@ def weather():
 
 
 if __name__ == '__main__':
-    # init_db()
+    # создание или подключение к БД
+    db_session.global_init('db/blogs.db')
     app.run(port=8000, host='127.0.0.1')
 
 """
