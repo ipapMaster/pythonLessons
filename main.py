@@ -48,9 +48,45 @@ def index():
     news = conn.execute("SELECT * FROM posts").fetchall()
     conn.close()  # отключились от курсора базы
     return render_template('index.html',
-                           title='Главная страницы',
+                           title='Главная страница',
                            username='Слушатель',
                            news=news)
+
+
+@app.route('/del/<int:post_id>')
+def delete_post(post_id):
+    conn = connect_db()
+    query = f"DELETE FROM posts WHERE id={post_id}"
+    # print(query)
+    conn.execute(query)
+    conn.commit()
+    conn.close()
+    return redirect(url_for('index'))  # '/'
+
+
+# CRUD - Create, Read, Update, Delete
+@app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
+def edit(post_id):
+    form = NewPost()
+    if form.validate_on_submit():
+        res = form.data
+        title = res['title']
+        content = res['content']
+        conn = connect_db()
+        query = f"UPDATE posts SET title='{title}', content='{content}' WHERE id={post_id}"
+        # print(query)
+        conn.execute(query)
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))  # '/'
+    conn = connect_db()
+    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
+    conn.close()
+    mess = f'Редактирование новости "{post[1]}"'
+    return render_template("addpost.html",
+                           title=mess,
+                           news_action=mess,
+                           form=form, post=post)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -67,7 +103,6 @@ def add_post():
     form = NewPost()
     if form.validate_on_submit():
         res = form.data
-        id = res['id']
         title = res['title']
         content = res['content']
         conn = connect_db()
@@ -82,13 +117,15 @@ def add_post():
 @app.route('/mail_form', methods=['GET'])
 def main_form():
     return render_template('ваш.html')
+
+
 # <form method="post" class="from-group">
 # 	<input type="email" class="form-control" name="email">
 # 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
 # </form>
 
 @app.route('/mail_form', methods=['POST'])
-def main_form():
+def mail_form():
     email = request.values.get('email')
     if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
         return f'Письмо на адрес {email} успешно отправлено!'

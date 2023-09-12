@@ -1,5 +1,10 @@
 h1 {
     color: #d22e3a;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
 }
 
 .reg_form {

@@ -1,23 +1,35 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-<h1>Добавление новости</h1>
-    <form action="" method="post" novalidate>
+<h1>{{ news_action }}</h1>
+    <form action="" method="post" class="reg_form" novalidate>
         {{ form.hidden_tag() }}
         <p>
         {{ form.title.label }}<br>
-        {{ form.title(class="form-control")}}<br>
+            {% if post %}
+                {{ form.title(class="form-control", value=post[1])}}<br>
+            {% else %}
+                {{ form.title(class="form-control")}}<br>
+            {% endif %}
         {% for error in form.title.errors %}
         <div class="alert alert-danger" role="alert">{{ error }}</div>
         {% endfor %}
         </p>
         <p>
         {{ form.content.label }}<br>
-        {{ form.content(class="form-control")}}<br>
+            {% if post %}
+                {{ form.content(class="form-control", value=post[2])}}<br>
+            {% else %}
+                {{ form.content(class="form-control")}}<br>
+            {% endif%}
         {% for error in form.content.errors %}
         <div class="alert alert-danger" role="alert">{{ error }}</div>
         {% endfor %}
         </p>
-        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {% if request.url_rule.endpoint == 'edit' %}
+            <p>{{ form.submit(type="submit", class="btn btn-primary", value="Обновить") }}</p>
+        {% elif request.url_rule.endpoint == 'add_post' %}
+            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {% endif %}
     </form>
     {% endblock %}

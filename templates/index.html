@@ -2,8 +2,20 @@
 
 {% block main_content %}
     <div class="alert alert-primary h1" role="alert">Привет, {{username}}!</div>
-    {% for item in news %}
-        <h2>{{ item['title'] }}</h2>
-        <div>{{ item['content'] }}</div>
-    {% endfor %}
+        <table class="table table-light table-striped table-bordered border-primary table-hover">
+        {% for item in news %}
+            <tr>
+                <td>
+                    <h2>{{ item['title'] }}</h2>
+                    <p>{{ item['content'] }}</p>
+                </td>
+                <td class="align-middle text-center">
+                    <a href="/edit/{{ item['id'] }}" title="Редактировать новость {{ item['title'] }}">&#9998;</a>
+                </td>
+                <td class="align-middle text-center">
+                    <a href="/del/{{ item['id'] }}" title="Удалить новость {{ item['title'] }}">&#128465;</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
 {% endblock %}
