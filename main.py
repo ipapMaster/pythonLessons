@@ -291,6 +291,8 @@ if __name__ == '__main__':
     user = db_sess.query(User).filter(User.id == 1).first()
     print(user)
     news = News(title="News#3", content="Content#3", is_private=False)
+    print(news.get_title())
+    # ДЗ
     # записи конкретного пользователя (user)
     # с взаимодействием с его записями
     user.news.append(news)  # почти как со списком
