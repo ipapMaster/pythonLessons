@@ -2,7 +2,8 @@ import datetime
 import os
 import sqlite3
 from data import db_session
-from data.users import User
+from data.news import News  # Подключили модель News
+from data.users import User  # Подключили модель Users
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template, flash
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
@@ -285,18 +286,15 @@ if __name__ == '__main__':
     # создание или подключение к БД
     db_session.global_init('db/blogs.db')
     # app.run(port=8000, host='127.0.0.1')
+    # Добавим новость
     db_sess = db_session.create_session()
-    # user = db_sess.query(User).first() - только первая запись
-    # for user in db_sess.query(User).all() - все записи
-    # фильтрация
-    # for user in db_sess.query(User).filter((User.id > 1) | (User.email.notlike("%3%"))):
-    #    print(user)
-    # user = db_sess.query(User).filter(User.id == 2).first()
-    user = db_sess.query(User).filter(User.id == 2).delete()
-    # print(user)
-    # user.name = 'User not 1'  # изменяем значение одного из полей БД
-    # user.created_date = datetime.datetime.now()
-    # db_sess.delete(user)
+    user = db_sess.query(User).filter(User.id == 1).first()
+    print(user)
+    news = News(title="News#3", content="Content#3", is_private=False)
+    # записи конкретного пользователя (user)
+    # с взаимодействием с его записями
+    user.news.append(news)  # почти как со списком
+    # db_sess.add(news)
     db_sess.commit()
 
 """
