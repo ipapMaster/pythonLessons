@@ -2,13 +2,14 @@ import os
 import sqlite3
 from data import db_session
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
-from flask import render_template
+from flask import render_template, flash
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
 from dotenv import load_dotenv
 from addpost import NewPost
 from loginform import LoginForm
 from mail_sender import send_mail
+from data.users import User
 
 app = Flask(__name__)  # создали экземпляр приложения
 # секретный ключ для защиты от cross-site request forgery,
@@ -64,6 +65,8 @@ def delete_post(post_id):
     conn.execute(query)
     conn.commit()
     conn.close()
+    flash(f'Новость №{post_id} была удалена!')
+    flash('Вам теперь не узнать, что там было')
     return redirect(url_for('index'))  # '/'
 
 
