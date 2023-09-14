@@ -16,3 +16,12 @@ a {
     border-radius: 5px;
     padding: 10px;
 }
+
+.user-inform {
+    margin: 10px auto;
+    max-width: 40%;
+    background-color: #ссffcc;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 10px;
+}

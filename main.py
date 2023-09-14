@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
-from flask import render_template
+from flask import render_template, flash
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
 from dotenv import load_dotenv
@@ -78,12 +78,13 @@ def edit(post_id):
         conn.execute(query)
         conn.commit()
         conn.close()
+        flash(f'Новость "{title}" была отредактирована!')
         return redirect(url_for('index'))  # '/'
     conn = connect_db()
     post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
     conn.close()
     mess = f'Редактирование новости "{post[1]}"'
-    # form.content.data = post[2]
+    form.content.data = post[2]
     return render_template("addpost.html",
                            title=mess,
                            news_action=mess,

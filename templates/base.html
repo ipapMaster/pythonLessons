@@ -45,6 +45,15 @@
     <!-- Переменное содержимое будет здесь -->
     {% block main_content %}{% endblock %}
 </div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="user-inform">
+            {% for mess in messages %}
+                <p>{{ mess }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
 <footer>
     <div class="text-center">&copy;Все права защищены</div>
 </footer>
