@@ -83,7 +83,7 @@ def edit(post_id):
     post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
     conn.close()
     mess = f'Редактирование новости "{post[1]}"'
-    # form.content.data = post[2]
+    form.content.data = post[2]
     return render_template("addpost.html",
                            title=mess,
                            news_action=mess,
