@@ -18,7 +18,8 @@
         <p>
         {{ form.content.label }}<br>
             {% if post %}
-                {{ form.content(class="form-control", value=post[2])}}<br>
+                <textarea class="form-control" id="content" name="content" rows="5" required>{{ post[2] }}
+                </textarea>
             {% else %}
                 {{ form.content(class="form-control")}}<br>
             {% endif%}
