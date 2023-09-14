@@ -31,3 +31,7 @@ class User(SqlAlchemyBase):
                                      default=datetime.datetime.now)
     # чтобы получать все новости конкретного пользователя
     news = orm.relationship("News", back_populates="user")
+
+    # для нужд отладки и проверки SQL-запросов
+    def __repr__(self):
+        return f'База {__class__.__name__} -> {self.name} : {self.email}'
