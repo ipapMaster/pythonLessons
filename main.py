@@ -1,6 +1,5 @@
 import datetime
 import os
-import sqlite3
 from data import db_session
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
@@ -10,6 +9,7 @@ import requests  # отдельный модуль для обращения к 
 import json
 from dotenv import load_dotenv
 from addpost import NewPost
+from forms.user import RegisterForm
 from loginform import LoginForm
 from mail_sender import send_mail
 
@@ -19,40 +19,10 @@ app = Flask(__name__)  # создали экземпляр приложения
 app.config['SECRET_KEY'] = 'short secret key'
 
 
-def connect_db():
-    """
-    Соединяемся с БД
-    :return connection object:
-    """
-    conn = sqlite3.connect('base.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def init_db():
-    conn = connect_db()
-    conn.execute(
-        """CREATE TABLE IF NOT EXISTS posts 
-        (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        title TEXT NOT NULL, 
-        content TEXT NOT NULL)""")
-    conn.close()
-
-
-def close_db(conn):
-    """
-    :param conn - от какой базы надо отключиться:
-    """
-    conn.close()
-
-
 @app.route('/')
 def index():
-    # with open('news.json', 'rt', encoding='utf=8') as file:
-    #     news_list = json.loads(file.read())
-    conn = connect_db()  # подключились к базе
-    news = conn.execute("SELECT * FROM posts").fetchall()
-    conn.close()  # отключились от курсора базы
+    db_sess = db_session.create_session()
+    news = db_sess.query(News).filter(News.is_private == 0)
     return render_template('index.html',
                            title='Главная страница',
                            username='Слушатель',
@@ -61,40 +31,40 @@ def index():
 
 @app.route('/del/<int:post_id>')
 def delete_post(post_id):
-    conn = connect_db()
-    query = f"DELETE FROM posts WHERE id={post_id}"
-    # print(query)
-    conn.execute(query)
-    conn.commit()
-    conn.close()
-    flash(f'Новость №{post_id} была удалена!')
-    flash('Вам теперь не узнать, что там было')
-    return redirect(url_for('index'))  # '/'
+    pass
 
 
 # CRUD - Create, Read, Update, Delete
 @app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 def edit(post_id):
-    form = NewPost()
+    pass
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
     if form.validate_on_submit():
-        res = form.data
-        title = res['title']
-        content = res['content']
-        conn = connect_db()
-        query = f"UPDATE posts SET title='{title}', content='{content}' WHERE id={post_id}"
-        # print(query)
-        conn.execute(query)
-        conn.commit()
-        conn.close()
-        return redirect(url_for('index'))  # '/'
-    conn = connect_db()
-    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
-    conn.close()
-    mess = f'Редактирование новости "{post[1]}"'
-    return render_template("addpost.html",
-                           title=mess,
-                           news_action=mess,
-                           form=form, post=post)
+        # form.about.data =
+        if form.password.data != form.password_again.data:
+            return render_template('register.html',
+                                   title='Регистрация',
+                                   form=form,
+                                   message='Пароли не совпадают')
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html',
+                                   title='Регистрация',
+                                   form=form,
+                                   message='Такой пользователь уже существует')
+        user = User(name=form.name.data,
+                    email=form.email.data,
+                    about=form.about.data)
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/login')
+    return render_template('register.html',
+                           title='Регистрация',
+                           form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -108,18 +78,7 @@ def login():
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_post():
-    form = NewPost()
-    if form.validate_on_submit():
-        res = form.data
-        title = res['title']
-        content = res['content']
-        conn = connect_db()
-        conn.execute("INSERT INTO posts (title, content) VALUES(?, ?)",
-                     (title, content))
-        conn.commit()
-        conn.close()
-        return redirect(url_for('index'))  # '/'
-    return render_template('addpost.html', title='Добавление новости', form=form)
+    pass
 
 
 @app.route('/mail_form', methods=['GET'])
@@ -285,33 +244,5 @@ def weather():
 if __name__ == '__main__':
     # создание или подключение к БД
     db_session.global_init('db/blogs.db')
-    # app.run(port=8000, host='127.0.0.1')
-    # Добавим новость
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == 1).first()
-    print(user)
-    news = News(title="News#3", content="Content#3", is_private=False)
-    print(news.get_title())
-    # ДЗ
-    # записи конкретного пользователя (user)
-    # с взаимодействием с его записями
-    user.news.append(news)  # почти как со списком
-    # db_sess.add(news)
-    db_sess.commit()
-
-"""
-    user.name = 'User3'
-    user.about = 'Some info about user 3'
-    user.email = 'email3@email.ru'
-    db_sess.add(user)
-    db_sess.commit()
-    Вот наше первое приложение.<br>
-    А вот <a href='/registration'>регистрация</a> пользователя.<br>
-    А вот <a href='/test_template'>тест</a> шаблонизации.<br>
-    А вот <a href='/image_sample'>ссылка</a> на картинку.<br>
-    А вот <a href='/sample_page'>ссылка</a> на HTML-документ.<br>
-    А вот <a href='/empty'>ссылка</a> которую мы не увидим (редирект на главную).<br>
-    А вот <a href='/bootstrap_sample'>ссылка</a> на Bootstrap.<br>
-    А вот <a href='/weather'>ссылка</a> на погоду.<br>
-    А теперь <a href='/file_upload'>загрузим</a> файл.<br>
-"""
+    # запуск приложения
+    app.run(port=8000, host='127.0.0.1')

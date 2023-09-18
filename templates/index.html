@@ -6,8 +6,18 @@
         {% for item in news %}
             <tr>
                 <td>
-                    <h2>{{ item['title'] }}</h2>
-                    <p>{{ item['content'] }}</p>
+                    <h2>{{ item.title }}</h2>
+                    <p>{{ item.content }}</p>
+                    <h3>Автор: {{ item.user.name }}</h3>
+                    <p>Дата написания: {{ item.created_date }}</p>
+                </td>
+                <td>
+                    <h3>Об авторе: {{ item.user.about }}</h3>
+                    {% if item.user.is_admin() %}
+                        <p>Он администратор сайта</p>
+                    {% else %}
+                        <p>Он пользователь без прав модерации</p>
+                    {% endif %}
                 </td>
                 <td class="align-middle text-center">
                     <a href="/edit/{{ item['id'] }}" title="Редактировать новость {{ item['title'] }}">&#9998;</a>
