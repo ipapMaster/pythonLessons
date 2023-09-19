@@ -1,10 +1,11 @@
 import datetime
+import misc
 import os
 from data import db_session
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
-from flask import render_template, flash
+from flask import render_template, flash, make_response, session
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 import json
 from dotenv import load_dotenv
@@ -17,6 +18,8 @@ app = Flask(__name__)  # создали экземпляр приложения
 # секретный ключ для защиты от cross-site request forgery,
 # CSRF - подделки межсайтовых запросов
 app.config['SECRET_KEY'] = 'short secret key'
+# срок жизни сессии
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 
 
 @app.route('/')
@@ -29,6 +32,35 @@ def index():
                            news=news)
 
 
+@app.route('/test_cookie')
+def cookie_test():
+    """
+    Чтобы удалить данные из cookies
+    res.set_cookie("visits_count", '1', max_age=0)
+    """
+    visit_count = int(request.cookies.get('visits_count', 0))
+    if visit_count:
+        res = make_response(f'Вы были на этой странице {visit_count + 1} раз')
+        res.set_cookie('visits_count', str(visit_count + 1),
+                       max_age=60 * 60 * 24)
+    else:
+        res = make_response('Вы тут впервые')
+        res.set_cookie('visits_count', '1',
+                       max_age=60 * 60 * 24)
+    return res
+
+
+@app.route('/test_session')
+def session_test():
+    """
+    Для удаления сессии используем следующий код
+    session.pop('visits_count', None)
+    """
+    visit_count = session.get('visits_count', 0)
+    session['visits_count'] = visit_count + 1
+    return make_response(f'Вы пришли на эту страницу {visit_count + 1} раз')
+
+
 @app.route('/del/<int:post_id>')
 def delete_post(post_id):
     pass
@@ -38,6 +70,7 @@ def delete_post(post_id):
 @app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 def edit(post_id):
     pass
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -81,9 +114,9 @@ def add_post():
     pass
 
 
-@app.route('/mail_form', methods=['GET'])
-def main_form():
-    return render_template('ваш.html')
+# @app.route('/mail_form', methods=['GET'])
+# def main_form():
+#     return render_template('ваш.html')
 
 
 # <form method="post" class="from-group">
@@ -91,12 +124,12 @@ def main_form():
 # 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
 # </form>
 
-@app.route('/mail_form', methods=['POST'])
-def mail_form():
-    email = request.values.get('email')
-    if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
-        return f'Письмо на адрес {email} успешно отправлено!'
-    return 'Сбой при отправке'
+# @app.route('/mail_form', methods=['POST'])
+# def mail_form():
+#     email = request.values.get('email')
+#     if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
+#         return f'Письмо на адрес {email} успешно отправлено!'
+#     return 'Сбой при отправке'
 
 
 # <form method="post" class="from-group">
@@ -235,10 +268,6 @@ def weather():
     <input type="submit" value="Узнать">
     </form>
     """
-
-
-# когда первый раз зашли на сайт
-# перед запуском рендера шаблона (первый из них)
 
 
 if __name__ == '__main__':
