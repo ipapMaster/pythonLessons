@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-    <div class="alert alert-primary h1" role="alert">Привет, {{ username }}!</div>
+    <div class="alert alert-primary h1" role="alert">Привет, {{ current_user.name }}!</div>
         <table class="table table-light table-striped table-bordered border-primary table-hover">
         {% for item in news %}
             <tr>
