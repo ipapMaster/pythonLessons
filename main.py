@@ -28,6 +28,8 @@ login_manager.init_app(app)
 # добавляем собственные функции в шаблонизатор Jinja
 # для фильтрации, передавая day_diff как объект
 app.jinja_env.filters['retrieve_days'] = misc.day_diff
+# а также для требуемого для визуализации формата даты
+app.jinja_env.filters['date_format'] = misc.format_datetime
 
 
 # функция получения данных пользователя
@@ -39,18 +41,12 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    days = []  # пустой пока список с кол-вом дней
     db_sess = db_session.create_session()
-    today = datetime.datetime.now()  # сегодняшняя дата и время
     news = db_sess.query(News).filter(News.is_private == 0)
-    # заполняем список кол-ом дней
-    for new in news:
-        days.append(misc.declination(misc.day_diff(today, new.created_date),
-                                     ('день', 'дня', 'дней')))
     return render_template('index.html',
                            title='Главная страница',
                            username='Слушатель',
-                           news=news, today=today)
+                           news=news)
 
 
 @app.route('/test_cookie')

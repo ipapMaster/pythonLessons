@@ -9,7 +9,7 @@
                     <h2>{{ item.title }}</h2>
                     <p>{{ item.content }}</p>
                     <h3>Автор: {{ item.user.name }}</h3>
-                    <p>Давность публикации в днях: {{ item.created_date | retrieve_days(today) }}</p>
+                    <p>Дата публикации: {{ item.created_date | date_format('%d.%m.%Y %H:%M') }}</p>
                 </td>
                 <td>
                     <h3>Об авторе: {{ item.user.about }}</h3>
