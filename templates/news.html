@@ -1,13 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-</head>
-<body>
-    {% for item in news['news'] %}
-        <h2>{{ item['title'] }}</h2>
-        <div>{{ item['content'] }}</div>
-    {% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block main_content %}
+<h1>Добавление новости</h1>
+    <form action="" method="post" novalidate>
+        <p>{{ message }}</p>
+        {{ form.hidden_tag() }}
+        <p>
+        {{ form.title.label }}<br>
+        {{ form.title(class="form-control")}}<br>
+        {% for error in form.title.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+        </p>
+        <p>
+        {{ form.content.label }}<br>
+        {{ form.content(class="form-control")}}<br>
+        {% for error in form.content.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endfor %}
+        </p>
+        <p>{{ form.is_private() }}&nbsp;{{form.is_private.label }}</p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+    {% endblock %}

@@ -6,9 +6,11 @@ from data import db_session
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
 from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
-from flask import render_template, make_response, session
-from flask_login import LoginManager, login_user
+from flask import render_template, make_response, session, flash
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
+
+from forms.news import NewsForm
 from forms.user import RegisterForm
 from forms.loginform import LoginForm
 from mail_sender import send_mail
@@ -36,16 +38,27 @@ app.jinja_env.filters['date_format'] = misc.format_datetime
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-    return db_sess.query(User).get(user_id)
+    return db_sess.get(User, user_id)  # return db_sess.query(User).get(user_id)
+
+@app.errorhandler(401)
+def http_401_handler(error):
+    flash('Для начала войдите с логином и паролем')
+    return redirect('/login')
 
 
 @app.route('/')
 def index():
     db_sess = db_session.create_session()
     news = db_sess.query(News).filter(News.is_private == 0)
+    if current_user.is_authenticated:
+        news = db_sess.query(News).filter(
+            (News.is_private == 1) | (News.user == current_user)
+        )
+    else:
+        news = db_sess.query(News).filter(News.is_private == 0)
     return render_template('index.html',
                            title='Главная страница',
-                           username='Слушатель',
+                           username='Слушатель. Авторизуйтесь, пожалуйста',
                            news=news)
 
 
@@ -111,30 +124,58 @@ def register():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
+        flash('Процедура регистрации прошла успешно!')
         return redirect('/login')
     return render_template('register.html',
                            title='Регистрация',
                            form=form)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Вы вышли')
+    return redirect('/')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.username.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect('/')
-        render_template('login.html', title='Авторизация',
-                        message='Неверный логин или пароль',
-                        form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+    if current_user.is_authenticated:
+        return redirect('/')
+    else:
+        form = LoginForm()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.email == form.username.data).first()
+            if user and user.check_password(form.password.data):
+                login_user(user, remember=form.remember_me.data)
+                flash('Вы успешно вошли')
+                return redirect('/')
+            flash('Неверные пара: логин - пароль')
+            render_template('login.html', title='Авторизация',
+                            message='Неверный логин или пароль',
+                            form=form)
+        return render_template('login.html', title='Авторизация', form=form)
 
 
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_post():
-    pass
+    form = NewsForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = News()
+        news.title = form.title.data
+        news.content = form.content.data
+        news.is_private = form.is_private.data
+        current_user.news.append(news)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        flash('Новость добавлена')
+        return redirect('/')
+    return render_template('news.html', title='Добавление новости', form=form)
+
 
 
 @app.route('/mail_form', methods=['GET'])
@@ -160,6 +201,7 @@ def mail_form():
 # 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
 # </form>
 @app.route('/users')
+@login_required
 def users():
     t = 'Кто за кем в очереди???'
     return render_template('query.html', title=t)

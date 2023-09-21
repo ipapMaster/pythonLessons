@@ -21,17 +21,27 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-5">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.url_rule.endpoint == 'index' %} active {% endif %}" aria-current="page" href="/">Главная</a>
+                        <a class="nav-link {% if request.url_rule.endpoint == 'index' %} active {% endif %}"
+                           aria-current="page" href="/">Главная</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.url_rule.endpoint == 'add_post' %} active {% endif %}"
+                           href="/add">Добавить</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.url_rule.endpoint == 'add_post' %} active {% endif %}" href="/add">Добавить</a>
+                        <a class="btn btn-secondary" title="Выйти" href="/logout">{{ current_user.name }}</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.url_rule.endpoint == 'register' %} active {% endif %}"
+                           href="/register">Регистрация</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.url_rule.endpoint == 'register' %} active {% endif %}" href="/register">Регистрация</a>
+                        <a class="nav-link {% if request.url_rule.endpoint == 'login' %} active {% endif %}"
+                           href="/login">Войти</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.url_rule.endpoint == 'login' %} active {% endif %}" href="/login">Войти</a>
-                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         &nbsp;
                     </li>
@@ -45,6 +55,13 @@
     </nav>
 </header>
 <div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mess">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <!-- Переменное содержимое будет здесь -->
     {% block main_content %}{% endblock %}
 </div>
