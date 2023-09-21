@@ -1,4 +1,4 @@
-# miscellaneous - прочие (полезности)
+# miscellaneous - прочие ("полезности")
 from datetime import date, datetime
 
 
@@ -47,3 +47,21 @@ def day_diff(date1, date2):
     else:
         d1 = date2
     return abs((d0 - d1).days)
+
+
+def format_datetime(value, format='%d-%m-%Y'):
+    """
+    Функция, возвращающая дату и время в привычном формате
+    :param value: дата в формате %Y-%m-%d %H:%M:%S.%f
+    :param format: желаемый формат описанный в документации
+    к datetime
+    :return: по умолчанию дату в формате %d-%m-%Y
+    """
+    res = ''
+    if value is None:
+        return ''
+    if isinstance(value, str):
+        res = datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')
+    else:
+        res = value
+    return res.strftime(format)

@@ -1,5 +1,7 @@
 import datetime
 import os
+
+import misc
 from data import db_session
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
@@ -33,12 +35,18 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
+    days = []  # пустой пока список с кол-вом дней
     db_sess = db_session.create_session()
+    today = datetime.datetime.now()  # сегодняшняя дата и время
     news = db_sess.query(News).filter(News.is_private == 0)
+    # заполняем список кол-ом дней
+    for new in news:
+        days.append(misc.declination(misc.day_diff(today, new.created_date),
+                                     ('день', 'дня', 'дней')))
     return render_template('index.html',
                            title='Главная страница',
                            username='Слушатель',
-                           news=news)
+                           news=news, days=days)
 
 
 @app.route('/test_cookie')
@@ -132,6 +140,7 @@ def add_post():
 @app.route('/mail_form', methods=['GET'])
 def main_form():
     return render_template('ваш.html')
+
 
 # <form method="post" class="form-group">
 # 	<input type="email" class="form-control" name="email">

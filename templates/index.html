@@ -9,7 +9,7 @@
                     <h2>{{ item.title }}</h2>
                     <p>{{ item.content }}</p>
                     <h3>Автор: {{ item.user.name }}</h3>
-                    <p>Написано: {{ item.get_days() }} назад</p>
+                    <p>Написано: {{ days[loop.index0] }} назад</p>
                 </td>
                 <td>
                     <h3>Об авторе: {{ item.user.about }}</h3>
