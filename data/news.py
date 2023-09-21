@@ -1,5 +1,6 @@
 import datetime
 import sqlalchemy
+import misc
 from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
@@ -21,3 +22,12 @@ class News(SqlAlchemyBase):
 
     def get_title(self):
         return self.title
+
+    def get_days(self):
+        """
+        :return: Возвращает число дней с требуемой формой слова
+        """
+        today = datetime.datetime.now()  # текущие дата и время
+        res = misc.declination(misc.day_diff(today, self.created_date),
+                               ('день', 'дня', 'дней'))
+        return res

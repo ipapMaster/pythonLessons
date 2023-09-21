@@ -9,6 +9,7 @@ from flask_login import LoginManager, login_user
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
 from forms.user import RegisterForm
 from forms.loginform import LoginForm
+from mail_sender import send_mail
 
 app = Flask(__name__)  # создали экземпляр приложения
 # секретный ключ для защиты от cross-site request forgery,
@@ -128,22 +129,21 @@ def add_post():
     pass
 
 
-# @app.route('/mail_form', methods=['GET'])
-# def main_form():
-#     return render_template('ваш.html')
+@app.route('/mail_form', methods=['GET'])
+def main_form():
+    return render_template('ваш.html')
 
-
-# <form method="post" class="from-group">
+# <form method="post" class="form-group">
 # 	<input type="email" class="form-control" name="email">
 # 	<button type="submit" class="btn btn-primary">Прислать письмо</button>
 # </form>
 
-# @app.route('/mail_form', methods=['POST'])
-# def mail_form():
-#     email = request.values.get('email')
-#     if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
-#         return f'Письмо на адрес {email} успешно отправлено!'
-#     return 'Сбой при отправке'
+@app.route('/mail_form', methods=['POST'])
+def mail_form():
+    email = request.values.get('email')
+    if send_mail(email, 'Вам письмо', 'Поздравляю, всё работает'):
+        return f'Письмо на адрес {email} успешно отправлено!'
+    return 'Сбой при отправке'
 
 
 # <form method="post" class="from-group">

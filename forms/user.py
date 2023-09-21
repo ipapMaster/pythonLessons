@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, EmailField
 from wtforms import TextAreaField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Email
 
 
 # Для валидации E-mail средствами скрипта
@@ -11,7 +11,7 @@ from wtforms.validators import DataRequired, Length
 
 class RegisterForm(FlaskForm):
     email = EmailField('Почта',
-                       validators=[DataRequired('E-mail обязателен')])  # Email(message='Не корректный формат почты')]
+                       validators=[DataRequired('E-mail обязателен'), Email(message='Не корректный формат почты')])
     password = PasswordField('Пароль', validators=[DataRequired('Вы не ввели пароль'),
                                                    Length(min=6, message='Пароль слишком короткий')])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired('Введите подтверждение пароля')])

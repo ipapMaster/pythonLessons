@@ -38,6 +38,12 @@ def day_diff(date1, date2):
     :param date2: вторая дата в формате YY-mm-dd h:m:s.f
     :return: целое число разницы в днях
     """
-    d0 = datetime.strptime(date1, '%Y-%m-%d %H:%M:%S.%f')
-    d1 = datetime.strptime(date2, '%Y-%m-%d %H:%M:%S.%f')
+    if isinstance(date1, str):
+        d0 = datetime.strptime(date1, '%Y-%m-%d %H:%M:%S.%f')
+    else:
+        d0 = date1
+    if isinstance(date2, str):
+        d1 = datetime.strptime(date2, '%Y-%m-%d %H:%M:%S.%f')
+    else:
+        d1 = date2
     return abs((d0 - d1).days)
