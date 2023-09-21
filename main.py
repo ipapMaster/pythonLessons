@@ -25,6 +25,10 @@ app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# добавляем собственные функции в шаблонизатор Jinja
+# для фильтрации, передавая day_diff как объект
+app.jinja_env.filters['retrieve_days'] = misc.day_diff
+
 
 # функция получения данных пользователя
 @login_manager.user_loader
@@ -46,7 +50,7 @@ def index():
     return render_template('index.html',
                            title='Главная страница',
                            username='Слушатель',
-                           news=news, days=days)
+                           news=news, today=today)
 
 
 @app.route('/test_cookie')
