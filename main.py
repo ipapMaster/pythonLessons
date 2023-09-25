@@ -9,7 +9,7 @@ from flask import Flask, url_for, redirect, request  # flask.request - с чем
 from flask import render_template, make_response, session, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
-
+from sqlalchemy import or_
 from forms.news import NewsForm
 from forms.user import RegisterForm
 from forms.loginform import LoginForm
@@ -40,6 +40,7 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.get(User, user_id)  # return db_sess.query(User).get(user_id)
 
+
 @app.errorhandler(401)
 def http_401_handler(error):
     flash('Для начала войдите с логином и паролем')
@@ -48,11 +49,30 @@ def http_401_handler(error):
 
 @app.route('/')
 def index():
+    found = request.args.get('substring')
+    if found:
+        params = {'title': f'Результаты поиска {found}',
+                  'username': f'Слушатель. Искали {found}. Авторизуйтесь.'}
+        db_sess = db_session.create_session()
+        news = db_sess.query(News).filter(
+            or_(
+                News.title.like(f'%{found}%'),
+                News.content.like(f'%{found}%'),
+                News.title.like(f'%{found.title()}%'),
+                News.content.like(f'%{found.title()}%'),
+                News.title.like(f'%{found.title()}%'),
+                News.content.like(f'%{found.title()}%')
+                & (News.is_private == 0)
+            )
+        )
+        params['news'] = news
+        return render_template('index.html', **params)
     db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private == 0)
     if current_user.is_authenticated:
         news = db_sess.query(News).filter(
-            (News.is_private == 1) | (News.user == current_user)
+            ((News.is_private == 1) &
+             (News.user == current_user)) |
+            (News.is_private == 0)
         )
     else:
         news = db_sess.query(News).filter(News.is_private == 0)
@@ -91,15 +111,52 @@ def session_test():
     return make_response(f'Вы пришли на эту страницу {visit_count + 1} раз')
 
 
-@app.route('/del/<int:post_id>')
+@app.route('/del/<int:post_id>', methods=['GET', 'POST'])
+@login_required
 def delete_post(post_id):
-    pass
+    db_sess = db_session.create_session()
+    news = db_sess.query(News).filter(News.id == post_id,
+                                      News.user == current_user).first()
+    if news:
+        db_sess.delete(news)
+        db_sess.commit()
+    else:
+        flash(f'{current_user.name}, у Вас нет прав на удаление этой новости')
+        return redirect('/')
+    return redirect('/')
 
 
 # CRUD - Create, Read, Update, Delete
 @app.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 def edit(post_id):
-    pass
+    form = NewsForm()
+    if request.method == 'GET':
+        db_sess = db_session.create_session()
+        news = db_sess.query(News).filter(News.id == post_id,
+                                          News.user == current_user).first()
+        if news:
+            form.title.data = news.title
+            form.content.data = news.content
+            form.is_private.data = news.is_private
+            form.submit.label.text = 'Обновить'
+        else:
+            flash(f'{current_user.name}, у Вас нет прав на редактирование этой новости')
+            return redirect('/')
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        news = db_sess.query(News).filter(News.id == post_id,
+                                          News.user == current_user).first()
+        if news:
+            news.title = form.title.data
+            news.content = form.content.data
+            news.is_private = form.is_private.data
+            db_sess.commit()
+            flash('Новость успешно обновлена')
+            return redirect('/')
+        else:
+            flash(f'{current_user.name}, у Вас нет прав на редактирование этой новости')
+            return redirect('/')
+    return render_template('news.html', title='Редактирование новости', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -177,7 +234,6 @@ def add_post():
     return render_template('news.html', title='Добавление новости', form=form)
 
 
-
 @app.route('/mail_form', methods=['GET'])
 def main_form():
     return render_template('ваш.html')
@@ -204,7 +260,10 @@ def mail_form():
 @login_required
 def users():
     t = 'Кто за кем в очереди???'
-    return render_template('query.html', title=t)
+    if current_user.is_admin():
+        return render_template('query.html', title=t)
+    flash(f'У Вас недостаточно прав, {current_user.name} для просмотра этой страницы')
+    return redirect('/')
 
 
 @app.route('/combo')

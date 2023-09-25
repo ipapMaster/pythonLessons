@@ -23,12 +23,23 @@
                         <p>Он пользователь без прав модерации</p>
                     {% endif %}
                 </td>
+                {% if current_user.is_authenticated and current_user == item.user %}
                 <td class="align-middle text-center">
                     <a href="/edit/{{ item['id'] }}" title="Редактировать новость {{ item['title'] }}">&#9998;</a>
                 </td>
                 <td class="align-middle text-center">
-                    <a href="/del/{{ item['id'] }}" title="Удалить новость {{ item['title'] }}">&#128465;</a>
+                    <a href="/del/{{ item['id'] }}"
+                       title="Удалить новость {{ item['title'] }}"
+                       onclick="return confirm('Правда удалить новость {{ item['id'] }}');">&#128465;</a>
                 </td>
+                {% else %}
+                <td class="align-middle text-center text-danger bg-warning" title="Нет прав редактирования">
+                    X
+                </td>
+                <td class="align-middle text-center text-danger bg-warning" title="Нет прав удаления">
+                    X
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </table>

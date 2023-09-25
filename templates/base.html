@@ -29,9 +29,18 @@
                         <a class="nav-link {% if request.url_rule.endpoint == 'add_post' %} active {% endif %}"
                            href="/add">Добавить</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-secondary" title="Выйти" href="/logout">{{ current_user.name }}</a>
+                    <!--Начало нового кода-->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link text-info fw-bold" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ current_user.name }}
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Личный кабинет</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" title="Выйти" href="/logout">Выйти</a></li>
+                      </ul>
                     </li>
+                    <!--Окончание нового кода-->
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.url_rule.endpoint == 'register' %} active {% endif %}"
@@ -46,8 +55,8 @@
                         &nbsp;
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Найти" aria-label="Найти">
+                <form class="d-flex" action="/" role="search">
+                    <input class="form-control me-2" name="substring" type="search" placeholder="Что ищем..." aria-label="Найти">
                     <button class="btn btn-outline-success" type="submit">Найти</button>
                 </form>
             </div>

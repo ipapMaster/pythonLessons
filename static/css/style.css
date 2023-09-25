@@ -27,3 +27,13 @@ a {
     border-radius: 5px;
     padding: 10px;
 }
+
+.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown > .dropdown-toggle:active {
+    /* Чтобы активный элемент не прилипал при клике */
+    pointer-events: none;
+}
+
