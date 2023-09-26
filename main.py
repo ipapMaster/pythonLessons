@@ -5,7 +5,7 @@ import misc
 from data import db_session, news_api
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
-from flask import Flask, url_for, redirect, request  # flask.request - с чем пользователь к нам пришёл
+from flask import Flask, url_for, redirect, request, jsonify  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template, make_response, session, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import requests  # отдельный модуль для обращения к интернет-ресурсу (стороннему)
@@ -47,6 +47,15 @@ def http_401_handler(error):
     return redirect('/login')
 
 
+@app.errorhandler(404)
+def http_404_handler(error):
+    return make_response(jsonify({'error': 'Request was not correct'}), 404)
+
+@app.errorhandler(415)
+def http_415_handler(error):
+    return make_response(jsonify({'error': 'Request had bad format'}), 415)
+
+
 @app.route('/')
 def index():
     found = request.args.get('substring')
@@ -80,6 +89,13 @@ def index():
                            title='Главная страница',
                            username='Слушатель. Авторизуйтесь, пожалуйста',
                            news=news)
+
+
+@app.route('/<int:post_id>')
+def get_news_by_id(post_id):
+    url = f'http://127.0.0.1:8000/api/news/{post_id}'
+    response = requests.get(url).json()
+    return response
 
 
 @app.route('/test_cookie')
