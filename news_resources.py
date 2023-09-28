@@ -57,10 +57,10 @@ class NewsListResource(Resource):
         args = parser.parse_args()
         db_sess = db_session.create_session()
         news = News(
-            title=args.json['title'],
-            content=args.json['content'],
-            user_id=args.json['user_id'],
-            is_private=args.json['is_private'],
+            title=args['title'],
+            content=args['content'],
+            user_id=args['user_id'],
+            is_private=args['is_private'],
         )
         db_sess.add(news)
         db_sess.commit()
