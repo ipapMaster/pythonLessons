@@ -2,9 +2,11 @@ import datetime
 import os
 
 import misc
+import news_resources
 from data import db_session, news_api
 from data.news import News  # Подключили модель News
 from data.users import User  # Подключили модель Users
+from flask_restful import reqparse, abort, Api, Resource
 from flask import Flask, url_for, redirect, request, jsonify  # flask.request - с чем пользователь к нам пришёл
 from flask import render_template, make_response, session, flash
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
@@ -16,6 +18,8 @@ from forms.loginform import LoginForm
 from mail_sender import send_mail
 
 app = Flask(__name__)  # создали экземпляр приложения
+# регистрируем API-сервис
+api = Api(app)
 # секретный ключ для защиты от cross-site request forgery,
 # CSRF - подделки межсайтовых запросов
 app.config['SECRET_KEY'] = 'short secret key'
@@ -414,6 +418,11 @@ if __name__ == '__main__':
     # создание или подключение к БД
     db_session.global_init('db/blogs.db')
     # регистрация api
-    app.register_blueprint(news_api.blueprint)
+    # app.register_blueprint(news_api.blueprint)
+    # регистрация ресурсов
+    # для чтения всех новостей
+    api.add_resource(news_resources.NewsListResource, '/api/v2/news')
+    # для чтения новости по номеру
+    api.add_resource(news_resources.NewsResource, '/api/v2/news/<int:news_id>')
     # запуск приложения
     app.run(port=8000, host='127.0.0.1')

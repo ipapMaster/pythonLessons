@@ -3,7 +3,7 @@ import argparse
 
 parser = argparse.ArgumentParser(
     description='Конвертирует числа в десятичную систему счисления')
-parser.add_argument('integers', metavar='integers', nargs='+',
+parser.add_argument('integers', metavar='Набор целых чисел', nargs='+',
                     type=str, help='Числа для конвертации')
 parser.add_argument('--base', default=2, type=int,
                     help='Основание системы счисления')
