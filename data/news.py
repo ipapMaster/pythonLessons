@@ -18,6 +18,7 @@ class News(SqlAlchemyBase, UserMixin, SerializerMixin):
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    is_published = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
     # Привяжем нашу новость к пользователю из таблицы users
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
