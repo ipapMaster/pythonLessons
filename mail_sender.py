@@ -5,6 +5,8 @@ import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
 
 def send_mail(email, subject, text):
     """
@@ -12,6 +14,8 @@ def send_mail(email, subject, text):
     :param subject: Тема сообщения
     :param text: Сам текст сообщения
     """
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
     address_from = os.getenv('FROM')
     password = os.getenv('PASSWORD')
 
